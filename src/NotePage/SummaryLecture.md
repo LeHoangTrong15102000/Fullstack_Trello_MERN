@@ -81,3 +81,5 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 - Ngoài ra còn có thể sử dụng Cssbaseline -> Để thằng component bên dưới thuộc tính lightMode của MUI
 
 - Nếu trong dự án mà chúng ta có sử dụng GlobalStyle Component thì hãy đưa nó vào `static constants` để trành việc nó `re-rendering`
+
+- Khi mà dùng sx props thì chúng ta có thể truy cập đến `theme` của thằng MUI từ đó có thể truy cập đến từng breakpoint của trình duyệt để responsive -> Do đó thằng sx props sẽ có lợi nhiều hơn dùng style bình thường còn dùng style bình thường thì phải viết `media.query`

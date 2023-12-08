@@ -11,6 +11,8 @@ import GlobalStyles from '@mui/material/GlobalStyles'
 const inputGlobalStyles = <GlobalStyles styles={{ div: { color: 'red' } }} />
 
 
+
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <CssVarsProvider theme={theme}>
