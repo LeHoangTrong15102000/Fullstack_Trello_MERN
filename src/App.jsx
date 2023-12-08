@@ -5,11 +5,7 @@ import { pink } from '@mui/material/colors'
 import HomeIcon from '@mui/icons-material/Home'
 import Typography from '@mui/material/Typography'
 
-import Board from './pages/Boards/_id'
-
-// Trong khi đó là không là gì một chút là được rồi nó là một cái gì đó rất là ố yeah
-
-// Trong khi
+import Board from '~/pages/Boards/_id'
 
 // Trong khi đó là gì mà chúng ta cần phải thực hiện nhiều hơn nữa
 

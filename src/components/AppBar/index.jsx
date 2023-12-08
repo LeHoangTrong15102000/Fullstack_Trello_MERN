@@ -1,6 +1,8 @@
 import Box from '@mui/material/Box'
 import ModeSelect from '../ModeSelect'
 
+// Thôi thì e hãy về nơi gắm hoa lụa là
+
 const AppBar = () => {
   return (
     <Box
