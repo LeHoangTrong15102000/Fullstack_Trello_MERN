@@ -14,6 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <CssVarsProvider theme={theme}>
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+      {/* Và thằng scrollbar nằm trong cssBaseline nên là chúng ta sẽ custom nó trong theme luôn */}
       <CssBaseline />
       {/* {inputGlobalStyles} */}
       <App />
