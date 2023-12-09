@@ -31,6 +31,48 @@ const theme = extendTheme({
         secondary: orange
       }
     }
+  },
+  components: {
+    // Name of the component
+    MuiButton: {
+      styleOverrides: {
+        // root là cấu trúc dữ liệu của nó mà chúng ta muốn override ghi đè
+        root: {
+          // Some CSS
+          textTransform: 'none'
+        }
+      }
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize: '0.875rem'
+        })
+      }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        // cho nó 1 cái function để lấy ra vài giá trị ở params để custom
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize: '0.875rem',
+          // Các vấn đề như này thì lên stackOverflow tìm sẽ nhanh hơn
+          // mui remove all blue/red/purple border selected
+          '.MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.light
+          },
+          '&:hover': {
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: theme.palette.primary.light
+            }
+          },
+          '& fieldset': {
+            borderWidth: '1px !important'
+          }
+        })
+      }
+    }
   }
   // ...other properties
 })

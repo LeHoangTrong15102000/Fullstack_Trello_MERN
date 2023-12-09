@@ -40,7 +40,7 @@ const AppBar = () => {
         {/* Sử dụng inheritViewBox để kế thừa lại scale của thằng svg */}
         {/* Để mà sử dụng được thằng này thì cần có thư viện của thằng vite đó là `vite-plugin-svgr` */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'primary.main' }}>
-          <SvgIcon component={TrelloIcon} inheritViewBox />
+          <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox />
           <Typography variant='span' sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
             Trello
           </Typography>
@@ -59,13 +59,13 @@ const AppBar = () => {
         <ModeSelect />
 
         <Tooltip title='Notifications'>
-          <Badge color='secondary' variant='dot' sx={{ cursor: 'pointer' }}>
-            <NotificationsNoneIcon />
+          <Badge color='warning' variant='dot' sx={{ cursor: 'pointer' }}>
+            <NotificationsNoneIcon sx={{ color: 'primary.main' }} />
           </Badge>
         </Tooltip>
 
         <Tooltip title='Help'>
-          <HelpOutlineIcon sx={{ cursor: 'pointer' }} />
+          <HelpOutlineIcon sx={{ cursor: 'pointer', color: 'primary.main' }} />
         </Tooltip>
 
         <Profile />
