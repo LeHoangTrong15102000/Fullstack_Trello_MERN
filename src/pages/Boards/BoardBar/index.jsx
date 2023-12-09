@@ -7,7 +7,7 @@ const BoardBar = () => {
         sx={{
           backgroundColor: 'primary.dark',
           width: '100%',
-          height: (theme) => theme.trello.boarđBarHeight,
+          height: (theme) => theme.trello.boardBarHeight, // cẩn thẩn Unikey trong lúc code
           display: 'flex',
           alignItems: 'center'
         }}
