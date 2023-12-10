@@ -12,20 +12,21 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Badge from '@mui/material/Badge'
 import Tooltip from '@mui/material/Tooltip'
+import Profile from './Menu/Profile'
 
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 import SvgIcon from '@mui/material/SvgIcon'
 import AppsIcon from '@mui/icons-material/Apps'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-import Profile from './Menu/Profile'
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 
 // Thôi thì e hãy về nơi gắm hoa lụa là
 
 const AppBar = () => {
   return (
     <Box
-      px={2} // 16px
+      // 16px
       sx={{
         width: '100%',
         height: (theme) => theme.trello.appBarHeight,
@@ -33,6 +34,7 @@ const AppBar = () => {
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: 2,
+        paddingX: 2,
         overflow: 'auto'
       }}
     >
@@ -52,7 +54,9 @@ const AppBar = () => {
             <Recent />
             <Starred />
             <Template />
-            <Button variant='outlined'>Create</Button>
+            <Button variant='outlined' startIcon={<LibraryAddIcon />}>
+              Create
+            </Button>
           </Box>
         </Box>
       </Box>
