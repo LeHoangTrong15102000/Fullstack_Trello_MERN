@@ -13,13 +13,13 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
 const MENU_STYLES = {
-  color: 'primary.main',
-  backgroundColor: 'white',
+  color: 'white',
+  backgroundColor: 'transparent',
   border: 'none',
   paddingX: '5px',
   borderRadius: '4px',
   '& .MuiSvgIcon-root': {
-    color: 'primary.main'
+    color: 'white'
   },
   '&:hover': {
     backgroundColor: 'primary.50'
@@ -39,7 +39,8 @@ const BoardBar = () => {
           gap: 2,
           paddingX: 2,
           overflow: 'auto',
-          borderTop: '1px solid #00bfa5'
+          borderBottom: '1px solid #00bfa5',
+          bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -51,16 +52,28 @@ const BoardBar = () => {
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Button variant='outlined' startIcon={<PersonAddIcon />}>
+          <Button
+            variant='outlined'
+            startIcon={<PersonAddIcon />}
+            sx={{
+              color: 'white',
+              borderColor: 'white',
+              '&:hover': {
+                borderColor: 'white'
+              }
+            }}
+          >
             Invite
           </Button>
           <AvatarGroup
             max={7}
             sx={{
+              gap: '2px',
               '& .MuiAvatar-root': {
                 width: 34,
                 height: 34,
-                fontSize: 16
+                fontSize: 16,
+                border: 'none'
               }
             }}
           >
@@ -74,6 +87,12 @@ const BoardBar = () => {
               <Avatar
                 alt='HoangTrongDev'
                 src='https://api-ecom.duthanhduoc.com/images/b258c475-174a-4339-a707-207743634785.jpg'
+              />
+            </Tooltip>
+            <Tooltip>
+              <Avatar
+                alt='HoangTrongDev'
+                src='https://api-ecom.duthanhduoc.com/images/77d9909d-3161-4195-a67c-db4585f80e4b.jpg'
               />
             </Tooltip>
             <Tooltip>
@@ -94,12 +113,7 @@ const BoardBar = () => {
                 src='https://api-ecom.duthanhduoc.com/images/efc30186-e630-4362-9302-4b4bf93398bb.png'
               />
             </Tooltip>
-            <Tooltip>
-              <Avatar
-                alt='HoangTrongDev'
-                src='https://api-ecom.duthanhduoc.com/images/7dc0560f-cf74-4abc-8c78-8acf871bfc75.jpg'
-              />
-            </Tooltip>
+
             <Tooltip>
               <Avatar
                 alt='HoangTrongDev'

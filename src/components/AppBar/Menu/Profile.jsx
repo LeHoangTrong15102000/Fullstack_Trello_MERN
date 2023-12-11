@@ -36,7 +36,7 @@ const Profile = () => {
           aria-expanded={open ? 'true' : undefined}
         >
           <Avatar
-            sx={{ width: 34, height: 34 }}
+            sx={{ width: 36, height: 36 }}
             alt='HoangTrongDev'
             src='https://api-ecom.duthanhduoc.com/images/03c2f2c8-7003-4ac2-9975-8ebe5cf9a5d7.jpg'
           />
