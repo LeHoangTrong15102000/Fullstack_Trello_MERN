@@ -39,7 +39,7 @@ const BoardBar = () => {
           gap: 2,
           paddingX: 2,
           overflow: 'auto',
-          borderBottom: '1px solid #00bfa5',
+          // borderBottom: '1px solid #00bfa5',
           bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
         }}
       >

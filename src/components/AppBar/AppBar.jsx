@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import Box from '@mui/material/Box'
-import ModeSelect from '../ModeSelect'
+import ModeSelect from '../ModeSelect/ModeSelect'
 
 // import TrelloLogo from '~/assets/trello.svg'
 // import ReactComponent để coi TrelloIcon như một component của React
