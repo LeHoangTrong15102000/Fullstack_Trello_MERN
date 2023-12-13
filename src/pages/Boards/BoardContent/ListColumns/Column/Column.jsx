@@ -20,12 +20,16 @@ import AddCardIcon from '@mui/icons-material/AddCard'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 
 import ListCards from './ListCards/ListCards'
+import { mapOrder } from '~/utils/sorts'
 
 // Chiều cao của HEADER và FOOTER sẽ fix cứng
 // const COLUMN_HEADER_HEIGHT = '50px'
 // const COLUMN_FOOTER_HEIGHT = '56px'
 
-const Column = () => {
+const Column = ({ column }) => {
+  // Sắp xếp các card trong column
+  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
@@ -58,7 +62,7 @@ const Column = () => {
           }}
         >
           <Typography variant='h6' sx={{ fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer' }}>
-            Column Title
+            {column?.title}
           </Typography>
           {/* Dropdown menu */}
           <Box>
@@ -133,7 +137,7 @@ const Column = () => {
         </Box>
 
         {/* List Card xử lý cả phần scroll nên là rất là hay */}
-        <ListCards />
+        <ListCards cards={orderedCards} />
 
         {/* Column Footer */}
         <Box

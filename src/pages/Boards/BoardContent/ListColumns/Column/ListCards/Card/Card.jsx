@@ -9,35 +9,14 @@ import GroupIcon from '@mui/icons-material/Group'
 import CommentIcon from '@mui/icons-material/Comment'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 
-const Card = ({ temporaryHideMedia }) => {
-  if (temporaryHideMedia) {
-    return (
-      <MuiCard sx={{ cursor: 'pointer', boxShadow: '0 1px 1px rgba(0,0,0,.2)', overflow: 'unset' }}>
-        {/* Thằng CardContent mặc định nó có giá trị overflowY: 'hidden' */}
-        <CardContent
-          sx={{
-            p: 1.5,
-            '&:last-child': {
-              p: 1.5
-            }
-          }}
-        >
-          <Typography>Card test 01</Typography>
-          {/* <Typography variant='body2' color='text.secondary'>
-Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all
-continents except Antarctica
-</Typography> */}
-        </CardContent>
-      </MuiCard>
-    )
-  }
+const Card = ({ card }) => {
+  // Check card actions
+  const isShowCardActions =
+    !!card?.memberIds.length || !!card?.comments.length || !!card?.attachments.length ? true : false
+
   return (
     <MuiCard sx={{ cursor: 'pointer', boxShadow: '0 1px 1px rgba(0,0,0,.2)', overflow: 'unset' }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image='https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev-scaled.jpg'
-        title='green iguana'
-      />
+      {card?.cover && <CardMedia sx={{ height: 140 }} image={card.cover} title={card.title} />}
       {/* Thằng CardContent mặc định nó có giá trị overflowY: 'hidden' */}
       <CardContent
         sx={{
@@ -47,23 +26,32 @@ continents except Antarctica
           }
         }}
       >
-        <Typography>MERN Stack nâng cao</Typography>
+        <Typography>{card.title}</Typography>
         {/* <Typography variant='body2' color='text.secondary'>
 Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all
 continents except Antarctica
 </Typography> */}
       </CardContent>
-      <CardActions sx={{ p: '0 4px 8px 4px' }}>
-        <Button size='small' startIcon={<GroupIcon />}>
-          20
-        </Button>
-        <Button size='small' startIcon={<CommentIcon />}>
-          15
-        </Button>
-        <Button size='small' startIcon={<AttachmentIcon />}>
-          10
-        </Button>
-      </CardActions>
+      {isShowCardActions && (
+        <CardActions sx={{ p: '0 4px 8px 4px' }}>
+          {!!card?.memberIds.length && (
+            <Button size='small' startIcon={<GroupIcon />}>
+              {card.memberIds.length}
+            </Button>
+          )}
+
+          {!!card?.comments.length && (
+            <Button size='small' startIcon={<CommentIcon />}>
+              {card.comments.length}
+            </Button>
+          )}
+          {!!card?.attachments.length && (
+            <Button size='small' startIcon={<AttachmentIcon />}>
+              {card.attachments.length}
+            </Button>
+          )}
+        </CardActions>
+      )}
     </MuiCard>
   )
 }

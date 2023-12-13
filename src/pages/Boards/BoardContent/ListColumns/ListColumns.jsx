@@ -4,7 +4,7 @@ import Button from '@mui/material/Button'
 
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder'
 
-const ListColumns = () => {
+const ListColumns = ({ columns }) => {
   return (
     <Box
       sx={{
@@ -21,9 +21,9 @@ const ListColumns = () => {
     >
       {/* Column */}
       {/* Xử lý CSS scroll cho từng column, do ban đầu không có overflow: 'unset' nên nó không hiện thanh scroll */}
-      <Column />
-      <Column />
-      <Column />
+      {columns?.map((column) => (
+        <Column key={column._id} column={column} />
+      ))}
 
       {/* Box Add new column CTA */}
       <Box
