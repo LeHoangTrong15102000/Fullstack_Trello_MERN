@@ -5,7 +5,7 @@ import Card from './Card/Card'
 // const COLUMN_HEADER_HEIGHT = '50px'
 // const COLUMN_FOOTER_HEIGHT = '56px'
 
-const ListCards = () => {
+const ListCards = ({ cards }) => {
   return (
     <Box
       sx={{
@@ -36,17 +36,11 @@ const ListCards = () => {
     >
       {/* Card sẽ custom theo phong cách trello của chúng ta */}
       {/* Khi mà card nhiều thì nó sẽ xuất hiện thanh scroll, nên thằng cha ở ngoài chúng ta cho nó p: '0 5px', m: '0 5px' là như vậy */}
-      <Card />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
+
+      {cards?.map((card) => (
+        <Card key={card._id} card={card} />
+      ))}
+      {/* <Card /> */}
     </Box>
   )
 }
