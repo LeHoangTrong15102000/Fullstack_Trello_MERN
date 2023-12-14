@@ -129,4 +129,20 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 - Thuộc tính dung sai biểu thị khoảng cách, tính bằng pixel, của chuyển động được cho phép trước khi thao tác kéo bị hủy bỏ. Nếu ngón tay hoặc bút cảm ứng được di chuyển trong thời gian trễ và dung sai được đặt thành 0 thì thao tác kéo sẽ bị hủy ngay lập tức. Nếu đặt dung sai cao hơn, chẳng hạn như dung sai 5 pixel, thao tác sẽ chỉ bị hủy nếu ngón tay di chuyển hơn 5 pixel trong thời gian trễ.
   Thuộc tính này đặc biệt hữu ích cho đầu vào bằng cảm ứng, trong đó cần tính đến một số dung sai khi sử dụng giới hạn độ trễ, vì đầu vào bằng cảm ứng kém chính xác hơn so với đầu vào bằng chuột.
 
-- ## Video Kéo thả
+- ## Đọc hiểu thư viện Dndkit nâng cao
+
+> > Hiểu cấu trúc dữ liệu demo của thư viện
+
+- Kiểu dữ liệu trong thư viện may mắn thì nó giống với dữ liệu chúng ta trong dự án(Backend trả về) -> Đó là trường hợp lý tưởng -> Thực tế thì đời không như là mơ
+
+- Và kiểu dữ liệu trong cấu trúc của thư viện nó sẽ khác hoàn toàn với kiểu dữ liệu của chúng ta
+
+- Có thể chia sẻ luôn được luôn vì chúng ta đang làm dữ án -> Chúng ta có thể biến đổi kiểu dữ liệu hiện tại của dự án `Cards` và `Column` thành 2 state riêng biệt như là thư viện -> Để làm gì => Để tận dụng lại các logic mà nó đã làm trong file `MultipleContainer`
+
+- Tuy nhiên có thể try hard để có kĩ năng hơn một tí là chúng ta sẽ sử dụng đúng kiểu dữ liệu của chúng ta -> Và chúng ta sẽ cố gắng đọc logic của thư viện để mà áp dụng vào dữ án
+
+- Rán chịu khó đọc hiểu được logic của thằng thư viện
+
+- Các video tiếp theo sẽ bắt đầu với thằng onDragStart và onDragEnd và onDragOver ,... -> 3 thằng này sẽ là 3 thằng chính trong cái dự án này
+
+- 3 thằng này sẽ là xử lý chính trong việc chúng ta kéo thả `Cards` trong dữ án
