@@ -83,3 +83,50 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 - Nếu trong dự án mà chúng ta có sử dụng GlobalStyle Component thì hãy đưa nó vào `static constants` để trành việc nó `re-rendering`
 
 - Khi mà dùng sx props thì chúng ta có thể truy cập đến `theme` của thằng MUI từ đó có thể truy cập đến từng breakpoint của trình duyệt để responsive -> Do đó thằng sx props sẽ có lợi nhiều hơn dùng style bình thường còn dùng style bình thường thì phải viết `media.query`
+
+## Video Kéo thả trello
+
+> > Xử lý chuẩn data sau khi kéo thả
+
+- Cái việc đầu tiên chúng ta cần làm là chúng ta cần phải đưa dữ liệu `orderedColumn` của chúng ta ra ngoài dạng state để chúng ta cập nhật lại -> ăn lại State sẽ render lại component của chúng ta
+
+- Do trong SortableContext chúng ta có trả về data: {...column} -> Nên khi kéo thả xong thì nó sẽ trả về data cho chúng ta dùng -> Nên cứ bỏ data vào sau này có cái mà dùng tới
+
+- Tiếp theo sẽ quan tâm đến 2 thuộc tính sau khi thực hiện `handleDragEnd` là `active` và `over`
+
+  - Để chúng ta biết là kéo từ thằng nào và đến vị trí nào'
+
+- Tìm vị trí của từng thằng column một
+
+- `arrayMove` là một hàm dùng để sắp xếp lại mảng columns ban đầu
+
+> > Tìm code hàm arrayMove của thư viện dnd-kit
+
+> > Bug click bị ăn vào sự kiện kéoo thả
+
+- Khi click vào một cái column vẫn bị ăn sự kiện `handleDragEnd` hoặc là khi kéo tới chỗ không xác định thì vẫn ăn sự kiện `handleDragEnd`
+
+> > Sensors - cảm biến kéo thả
+
+- Mặc định của thằng dndContext nó sử dụng Pointer-Sensor
+
+- Để fix cái lỗi khi nhấn vào column thì nó gọi hàm `handleDragEnd`
+
+- Sensors mặc định nó sử dụng là Pointer và Keyboard
+
+> > Kéo thả ở các thiết bị mobile
+
+- Chỉ chỉ định touch-action CSS cho những component kéo thả -> Không có cách nào để ngăn chặn ở trình duyệt thì hãy set touchAction: 'none' là cách đáng tin cậy nhất để xử lý cái bug này.
+
+- Đôi khi kéo ở bên dưới thì nó hơi giật cục một tí không mượn như `nắm ở đầu cột kéo`
+
+- Nếu cái cách touch-action: 'none' không hoạt động đúng theo ý trong trường hợp cái case này của chúng ta -> Thì hãy dùng Mouse and Touch sensor để thay thế vào
+
+- Nếu đã sử dụng `mouseSensor` và `touchSensor` rồi thì chúng ta không cần sử dụng thằng `pointerSensor - (sensor tại con trỏ điểm nữa)` nữa
+
+-> Sẽ ưu tiên sử dụng kết hợp 2 loại sensor là mouse và touch để có trải nghiệm trên mobile là tốt nhất, không bị bug.
+
+- Thuộc tính dung sai biểu thị khoảng cách, tính bằng pixel, của chuyển động được cho phép trước khi thao tác kéo bị hủy bỏ. Nếu ngón tay hoặc bút cảm ứng được di chuyển trong thời gian trễ và dung sai được đặt thành 0 thì thao tác kéo sẽ bị hủy ngay lập tức. Nếu đặt dung sai cao hơn, chẳng hạn như dung sai 5 pixel, thao tác sẽ chỉ bị hủy nếu ngón tay di chuyển hơn 5 pixel trong thời gian trễ.
+  Thuộc tính này đặc biệt hữu ích cho đầu vào bằng cảm ứng, trong đó cần tính đến một số dung sai khi sử dụng giới hạn độ trễ, vì đầu vào bằng cảm ứng kém chính xác hơn so với đầu vào bằng chuột.
+
+- ## Video Kéo thả
