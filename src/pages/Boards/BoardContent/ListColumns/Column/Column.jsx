@@ -22,24 +22,44 @@ import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
 import { mapOrder } from '~/utils/sorts'
 
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 // Chiều cao của HEADER và FOOTER sẽ fix cứng
 // const COLUMN_HEADER_HEIGHT = '50px'
 // const COLUMN_FOOTER_HEIGHT = '56px'
 
 const Column = ({ column }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: column._id, // Dữ liệu của thư viện nó hiểu là `id` nên là phải dùng `id`
+    data: { ...column }
+  })
+
+  const dndKitColumnStyles = {
+    touchAction: 'none', // Dành cho sensor default dạng PointerSensor
+    // Thay vì là Transform thì chúng ta  sẽ để là Translate
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
+
   // Sắp xếp các card trong column
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
 
+  // Dropdown menu
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
-
   const handleClick = (event) => setAnchorEl(event.currentTarget)
-
   const handleClose = () => setAnchorEl(null)
   return (
     <>
       {/* Column 1 */}
       <Box
+        // Attri Dnd kit
+        ref={setNodeRef}
+        style={dndKitColumnStyles}
+        {...attributes}
+        {...listeners}
+        // sx props
         sx={{
           minWidth: '300px',
           maxWidth: '300px',
