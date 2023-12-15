@@ -41,6 +41,14 @@ const BoardContent = ({ board }) => {
     setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
   }, [board])
 
+  const handleDragStart = (event) => {
+    // console.log('handleDragStart >>>>> ', event)
+    const isDraggingCard = event.active.data.current.columnId
+    if (isDraggingCard) {
+      console.log('Dragging Card >>> true')
+    }
+  }
+
   // Sẽ nhận được giá trị từ thư viện kéo thả của chúng ta -> event
   const handleDragEnd = (event) => {
     console.log('handleDragEnd', event)
@@ -70,7 +78,7 @@ const BoardContent = ({ board }) => {
   }
   return (
     //  thằng Box trên mục đích là để hồi padding thôi để cho nó hiện thành scroll đẹp hơn
-    <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
+    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <Box
         sx={{
           bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),

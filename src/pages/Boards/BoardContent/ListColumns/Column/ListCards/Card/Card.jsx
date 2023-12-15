@@ -9,13 +9,37 @@ import GroupIcon from '@mui/icons-material/Group'
 import CommentIcon from '@mui/icons-material/Comment'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 const Card = ({ card }) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: card._id, // Dữ liệu của thư viện nó hiểu là `id` nên là phải dùng `id`
+    data: { ...card }
+  })
+
+  const dndKitCardStyles = {
+    touchAction: 'none', // Dành cho sensor default dạng PointerSensor
+    // Thay vì là Transform thì chúng ta  sẽ để là Translate
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : undefined
+  }
+
   // Check card actions
   const isShowCardActions =
     !!card?.memberIds.length || !!card?.comments.length || !!card?.attachments.length ? true : false
 
+  const handleDragEnd = () => {}
+
   return (
-    <MuiCard sx={{ cursor: 'pointer', boxShadow: '0 1px 1px rgba(0,0,0,.2)', overflow: 'unset' }}>
+    <MuiCard
+      ref={setNodeRef}
+      style={dndKitCardStyles}
+      {...attributes}
+      {...listeners}
+      sx={{ cursor: 'pointer', boxShadow: '0 1px 1px rgba(0,0,0,.2)', overflow: 'unset' }}
+    >
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card.cover} title={card.title} />}
       {/* Thằng CardContent mặc định nó có giá trị overflowY: 'hidden' */}
       <CardContent
