@@ -146,3 +146,47 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 - Các video tiếp theo sẽ bắt đầu với thằng onDragStart và onDragEnd và onDragOver ,... -> 3 thằng này sẽ là 3 thằng chính trong cái dự án này
 
 - 3 thằng này sẽ là xử lý chính trong việc chúng ta kéo thả `Cards` trong dữ án
+
+- ## Thực hành nâng cao với kéo thả card với Dndkit: DragOverlay
+
+- \*\*\*\* Xử lý bug khi kéo column bị Flickering -> Cái bug này thực chất liên quan đến chiều cao của cái phần tử kéo thả
+
+  - Ở cái đoạn setNodeRef, DndkitColumnStyles attributes listeners của chúng ta -> Bug kéo thả được sinh ra từ đây
+
+  - 2 column bằng chiều cao với nhau thì nó không có vấn đề gì, nhưng mà khi khác chiều cao với nhau thì nó sinh ra bug -> Đó là kéo thả bị Flickering
+
+- Bây giờ chúng ta sẽ fix cái vấn đề này -> Sau khi đã fix được một chút vấn đề này rồi thì tiếp theo sẽ fix triệt để hơn nữa
+
+- Mặc đinh cái div ngoài nó sẽ ăn chiều cao là 100%
+- Nhưng mà cái chiều cao của thằng column02 và column03 cái chiều cao nó đang full cái boardContent -> Nên khi di chuyển khoảng màu xanh thì column02 và column03 nó cũng di chuyển theo -> Như thế này thì không được
+
+- Do là khi sử dụng trên mobile và tablet khi mà dùng ngón tay để di chuyển cái vùng `Board` mà vô tình kéo cái column thì nó không hay lắm -> Thì cách fix nó sẽ là như thế nào -> Những cái này là tìm bug ra bug và fixx thôi(không ai dạy chúng ta cái này đâu)
+  -> Thì cái phần `listeners` phải để vào phần box -> Hiểu đơn giản thì thằng listeners như là cái sự kiện lắng nghe keó thả -> Thì khi mà chúng ta kéo thả thì chúng ta chỉ kéo thả ở phần `Box`(phần chứa nội dung của column) mà thôi
+
+- \*\*\*\* Dnd-kit DragOverlay - giữ chỗ khi kéo thả
+
+- Tiếp theo trong phần column chúng ta muốn làm mờ phần kéo thả
+
+- Thuộc tính isDragging là đang trong lúc kéo column
+
+- Xử lý phần giữ chỗ cho card khi mà kéo thả
+
+- Thì chúng ta sẽ sử dụng cấu trúc dữ liệu của chúng ta thay vì sử dụng cấu trúc dữ liệu của bọn thư viện
+
+- Chúng ta cần phải làm sao mà phân biệt được 2 trường hợp là kéo thả card và kéo thả column -> Thì chúng ta cần phải có một hàm đó là `onDragStart` để biết khi mà bắt đầu kéo thì nó cần phải -> Sử dụng hàm này để biết được là nó đang kéo vào column hay kéo vào card và dựa thêm vào `data.current` bên trong hàm `onDragStart()` trả về(bởi vì cái Id về sau sẽ là một chuỗi kí tự ngẫu nhiên)
+
+- Một cái card thì nó sẽ chứa `columnId` còn cái column thì nó sẽ không chứa `columnId` rồi chúng ta sẽ sử dụng cái này để phân biệt được là đang kéo card hay là keo column
+
+- ## Thực hành nâng cao với kéo thả card với Dndkit: onDragOver
+
+- ## Thuật toán phát hiện va chạm với Dnd-kikt
+
+- ## Hoàn thiện kéo thả card trong cùng Column
+
+- ## Hoàn thiện kéo thả card giữa 2 column khác nhau
+
+- ## Xử lý bug rất dị khi kéo thả - Dndkit
+
+- ## Xử lý triệt để bug nhấp nháy khi kéo thả
+
+- ## Xử lý Bug khi Column rỗng không chứa card

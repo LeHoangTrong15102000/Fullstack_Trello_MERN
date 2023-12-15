@@ -30,7 +30,7 @@ import { CSS } from '@dnd-kit/utilities'
 // const COLUMN_FOOTER_HEIGHT = '56px'
 
 const Column = ({ column }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id, // Dữ liệu của thư viện nó hiểu là `id` nên là phải dùng `id`
     data: { ...column }
   })
@@ -39,7 +39,9 @@ const Column = ({ column }) => {
     touchAction: 'none', // Dành cho sensor default dạng PointerSensor
     // Thay vì là Transform thì chúng ta  sẽ để là Translate
     transform: CSS.Translate.toString(transform),
-    transition
+    transition,
+    height: '100%', // Cứ fix cái chiều cao ở đây để hồi làm phần giữ chỗ (DragOverlay) cho nó chuẩn
+    opacity: isDragging ? 0.5 : undefined
   }
 
   // Sắp xếp các card trong column
@@ -51,14 +53,10 @@ const Column = ({ column }) => {
   const handleClick = (event) => setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
   return (
-    <>
-      {/* Column 1 */}
+    // Sẽ bọc nó vào trong một cái div, mặc định cái div ngoài nó sẽ ăn chiều cao là 100%
+    <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
       <Box
-        // Attri Dnd kit
-        ref={setNodeRef}
-        style={dndKitColumnStyles}
-        {...attributes}
-        {...listeners}
+        {...listeners} // Phần lắng n ghe các event -> Để chỉ kéo thả được trong đây thôi
         // sx props
         sx={{
           minWidth: '300px',
@@ -87,15 +85,15 @@ const Column = ({ column }) => {
           {/* Dropdown menu */}
           <Box>
             {/* <Button
-        id='basic-button-workspaces'
-        aria-controls={open ? 'basic-menu-workspaces' : undefined}
-        aria-haspopup='true'
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        endIcon={<ExpandMoreIcon />}
-      >
-        Workspaces
-      </Button> */}
+     id='basic-button-workspaces'
+     aria-controls={open ? 'basic-menu-workspaces' : undefined}
+     aria-haspopup='true'
+     aria-expanded={open ? 'true' : undefined}
+     onClick={handleClick}
+     endIcon={<ExpandMoreIcon />}
+   >
+     Workspaces
+   </Button> */}
             <Tooltip title='More options'>
               <ExpandMoreIcon
                 id='basic-column-dropdown'
@@ -175,7 +173,7 @@ const Column = ({ column }) => {
           </Tooltip>
         </Box>
       </Box>
-    </>
+    </div>
   )
 }
 
