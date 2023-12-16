@@ -23,7 +23,8 @@ const Card = ({ card }) => {
     // Thay vì là Transform thì chúng ta  sẽ để là Translate
     transform: CSS.Translate.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : undefined
+    opacity: isDragging ? 0.5 : undefined,
+    border: isDragging ? '1px solid #2ecc71' : undefined
   }
 
   // Check card actions
@@ -31,6 +32,8 @@ const Card = ({ card }) => {
     !!card?.memberIds.length || !!card?.comments.length || !!card?.attachments.length ? true : false
 
   const handleDragEnd = () => {}
+
+  const handleDragOver = () => {}
 
   return (
     <MuiCard

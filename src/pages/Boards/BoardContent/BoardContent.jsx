@@ -69,16 +69,45 @@ const BoardContent = ({ board }) => {
     }
   }
 
-  console.log('DragItemData', activeDragItemData)
+  // Trigger khi bắt đầu kéo qua một cái column khác(đè lên cái column khác thì nó sẽ chạy)
+  const handleDragOver = (event) => {
+    // Không làm gì thêm nếu đang kéo column -> Vì column chúng ta đã xử lý oke rồi nên chúng ta sẽ không đả động gì đến column cả
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) return
 
-  // Trigger khi thả/drop phần tử
-  const handleDragEnd = (event) => {
-    // Sẽ nhận được giá trị từ thư viện kéo thả của chúng ta -> event
-    // console.log('handleDragEnd', event)
+    // Còn nếu kéo card thì chúng ta xử lý thêm để có thể kéo card qua lại giữa các column
+    // console.log('HandleDragOver', event)
     const { active, over } = event
 
     // Nếu over là null thì code sẽ không chạy nữa(kéo linh tinh ra ngoài thì return luôn tránh lỗi)
-    if (!over) return
+    // Ở dưới chúng ta sẽ xử lý sâu cái active nên là chúng ta sẽ kiểm trả thật là kĩ
+    if (!active || !over) return
+
+    // Chúng ta nên lấy cái activeDraggingCardId ở trong scrope của cái function này luôn cho dễ sử dụng
+    const {
+      id: activeDraggingCardId,
+      // sửa lại tên biến để đọc tên biến là hiểu luôn
+      data: { current: activeDraggingCardData }
+    } = active
+    // OverCard Là cái card đang tương tác với cái card đang được kéo ở trên hoặc là ở dưới
+    const { id: overCardId } = over
+
+    // Tìm 2 cái columns theo cardId
+  }
+
+  // Trigger trong quá trình kéo (drag) một phần tử
+  const handleDragEnd = (event) => {
+    // Sẽ nhận được giá trị từ thư viện kéo thả của chúng ta -> event
+    // console.log('handleDragEnd', event)
+
+    // Nếu là hành động kéo thả Card thì tạm thời dừng lại và không chạy
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
+      // console.log('Hành động kéo thả Card - Tạm thời không làm gì cả')
+      return
+    }
+    const { active, over } = event
+
+    // Kiểm tra nếu active hoặc over là null thì code sẽ không chạy nữa(kéo linh tinh ra ngoài thì return luôn tránh lỗi)
+    if (!active || !over) return
 
     // Khi mà vị trí nó có thay đổi thì mới xử lý tiếp
     if (active.id !== over.id) {
@@ -117,7 +146,7 @@ const BoardContent = ({ board }) => {
 
   return (
     //  thằng Box trên mục đích là để hồi padding thôi để cho nó hiện thành scroll đẹp hơn
-    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
       <Box
         sx={{
           bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),

@@ -183,6 +183,22 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 
 - Đọc trước code logic của thằng onDragOver hiểu cái kiểu dữ liệu mà thư viện nó cung cấp cho chúng ta để có một tư duy tốt -> Để xong sau đó áp dụng vào kiểu dữ liệu của chúng ta(từ kiểu dữ liệu của thư viện áp dụng qua kiểu dữ liệu của chúng ta)
 
+- Ở hàm handleDragEnd mình phải kiểm tra xem là mình đang kéo cái gì (column hay là card) -> Sử dụng `ACTIVE_DRAG_ITEM_TYPE` -> Lần sau sẽ xử lý lại cái handleDragEnd kĩ -> lần này khi mà ACTIVE_DRAG_ITEM_TYPE.CARD === activeDragItemType thì chúng ta return luôn không làm gì cả
+
+- Bữa nay sẽ code không nhiều nhưng mà logic nó lại khó(game khó thì mới đáng chơi)
+
+- Bây giờ cần phải lấy được activeId và overId -> Cần phải đặt tên cho nó rõ nghĩa
+
+- Phải hiểu là chúng ta bây giờ đang xử lý dữ liệu trong cái hàm handleDragOver là chính nên là chúng ta sẽ lấy cái Id mà hàm bên trong nó trả về luôn
+
+- Còn thằng state `activeDragItemId` để buổi tiếp thoe code tiếp handleDragEnd đã để coi chắc cốp là có sử dụng thằng `activeDragItemId` này hay không
+
+  - const {
+    id: activeDraggingCardId,
+    data: { current: activeDraggingCardData }
+    } = active
+    => Nên destructuring dữ liệu ở bên trong đây luôn
+
 - ## Thuật toán phát hiện va chạm với Dnd-kikt
 
 - ## Hoàn thiện kéo thả card trong cùng Column
