@@ -40,6 +40,7 @@ const Column = ({ column }) => {
     // Thay vì là Transform thì chúng ta  sẽ để là Translate
     transform: CSS.Translate.toString(transform),
     transition,
+    // Chiều cao sẽ luôn max 100% vì nếu không sẽ bị lỗi lúc kéo column qua một cái column dài thì phải kéo ở giữa rất khó chịu. Lưu ý lúc này phải kết hợp với {...listeners} nằm ở Box chứ không phải ở div ngoài cùng để tránh trường hợp kéo vào vùng xanh
     height: '100%', // Cứ fix cái chiều cao ở đây để hồi làm phần giữ chỗ (DragOverlay) cho nó chuẩn
     opacity: isDragging ? 0.5 : undefined
   }
@@ -53,10 +54,10 @@ const Column = ({ column }) => {
   const handleClick = (event) => setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
   return (
-    // Sẽ bọc nó vào trong một cái div, mặc định cái div ngoài nó sẽ ăn chiều cao là 100%
+    // Sẽ bọc nó vào trong một cái div, mặc định cái div ngoài nó sẽ ăn chiều cao là 100%(phải bọc thẻ div vì vấn đề chiều cao khi kéo thả)
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
       <Box
-        {...listeners} // Phần lắng n ghe các event -> Để chỉ kéo thả được trong đây thôi
+        {...listeners} // Phần lắng nghe các event -> Để chỉ kéo thả được trong đây thôi -> Không gian kéo thả chịu trong cáii box này thôi
         // sx props
         sx={{
           minWidth: '300px',

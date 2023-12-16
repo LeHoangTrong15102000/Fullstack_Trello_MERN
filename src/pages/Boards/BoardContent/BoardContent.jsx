@@ -1,22 +1,33 @@
 import { useEffect, useState } from 'react'
 import {
   DndContext,
+  DragOverlay,
   PointerSensor,
   MouseSensor,
   TouchSensor,
   KeyboardSensor,
   useSensor,
-  useSensors
+  useSensors,
+  defaultDropAnimationSideEffects
 } from '@dnd-kit/core'
 import Box from '@mui/material/Box'
 import { arrayMove } from '@dnd-kit/sortable'
 
 import ListColumns from './ListColumns/ListColumns'
 import { mapOrder } from '~/utils/sorts'
+import Column from './ListColumns/Column/Column'
+import Card from './ListColumns/Column/ListCards/Card/Card'
 
 // Còn chiều cao của LIST CARD sẽ linh hoạt để nó đáp ứng được với chiều cao
 
 // Tổ chức lại cấu trúc code một cách khoa học Board - Columns - Cards cho nó hợp lí để dễ dàng mantaince sau này
+
+// Kiểu item mà chúng ta đang kéo là kiểu gì là : Column hay card
+
+const ACTIVE_DRAG_ITEM_TYPE = {
+  COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
+  CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
+}
 
 const BoardContent = ({ board }) => {
   // Nếu sử dụng PointerSensor mặc định thì phải kết hợp thuộc tính CSS touch-action: none ở những phàn tử kéo thả
@@ -30,28 +41,40 @@ const BoardContent = ({ board }) => {
   // Yêu cầu phải 10px thì mới được active y chang pointerSensor
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
   // Nhấn giữ 250ms và dung sai của cảm ứng (dễ hiểu là di chuyển/chênh lệch 5px) thì mới kích hoạt event
-  const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
+  const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 500 } })
   // const sensors = useSensors(pointerSensor)
   const sensors = useSensors(mouseSensor, touchSensor)
 
   //  Sắp xếp mảng column dựa trên mảng khác , sau này sẽ sắp xếp dựa trên mảng columnOrderIds từ BE trả về
   const [orderedColumns, setOrderedColumns] = useState([])
+  // Cùng một thời điểm có column hoặc là card đang được kéo
+  const [activeDragItemId, setActiveDragItemId] = useState(null) // khi bắt đầu kéo thì phải gán cái itemId vào state này
+  const [activeDragItemType, setActiveDragItemType] = useState(null) // type này có thể dựa vào columnId để xác định được
+  const [activeDragItemData, setActiveDragItemData] = useState(null)
 
   useEffect(() => {
     setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
   }, [board])
 
+  // Trigger khi bắt đầu kéo một phần tử
   const handleDragStart = (event) => {
-    // console.log('handleDragStart >>>>> ', event)
-    const isDraggingCard = event.active.data.current.columnId
+    console.log('handleDragStart >>>>> ', event)
+    const isDraggingCard = event?.active?.data?.current.columnId
+    setActiveDragItemId(event?.active?.id)
+    setActiveDragItemType(isDraggingCard ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN)
+    setActiveDragItemData(event?.active?.data?.current)
+
     if (isDraggingCard) {
       console.log('Dragging Card >>> true')
     }
   }
 
-  // Sẽ nhận được giá trị từ thư viện kéo thả của chúng ta -> event
+  console.log('DragItemData', activeDragItemData)
+
+  // Trigger khi thả/drop phần tử
   const handleDragEnd = (event) => {
-    console.log('handleDragEnd', event)
+    // Sẽ nhận được giá trị từ thư viện kéo thả của chúng ta -> event
+    // console.log('handleDragEnd', event)
     const { active, over } = event
 
     // Nếu over là null thì code sẽ không chạy nữa(kéo linh tinh ra ngoài thì return luôn tránh lỗi)
@@ -75,7 +98,23 @@ const BoardContent = ({ board }) => {
 
       setOrderedColumns(dndOrderedColumns)
     }
+
+    setActiveDragItemId(null)
+    setActiveDragItemType(null)
+    setActiveDragItemData(null)
   }
+
+  // Animation khi chúng ta thả(Drop) phần tử - Test bằng cách kéo xong thả trực tiếp và nhìn phần giữ chỗ Overlay (video 32), khi kéo về thì cái bóng nó không bị biến mất nhưng khi mà kéo về thì nó bị che lại
+  const customDropAnimation = {
+    sideEffects: defaultDropAnimationSideEffects({
+      styles: {
+        active: {
+          opacity: '0.5'
+        }
+      }
+    })
+  }
+
   return (
     //  thằng Box trên mục đích là để hồi padding thôi để cho nó hiện thành scroll đẹp hơn
     <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -91,6 +130,17 @@ const BoardContent = ({ board }) => {
         {/* Column */}
         {/* Xử lý CSS scroll cho từng column, do ban đầu không có overflow: 'unset' nên nó không hiện thanh scroll */}
         <ListColumns columns={orderedColumns} />
+
+        {/* sẽ để DragOverlay nằm song song với ListColumns */}
+        <DragOverlay dropAnimation={customDropAnimation}>
+          {/* Sẽ cần phải kiểm tra */}
+          {!activeDragItemType && null}
+          {/* Khi kéo một column thì chúng ta sẽ gọi 1 component column ở đây để giữ chỗ(Nếu không có thằng giữ chỗ thì component chỉ bị làm mờ đi) và không thấy được hình ảnh phần tử gốc đang bị kéo */}
+          {activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
+            <Column column={activeDragItemData} />
+          )}
+          {activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && <Card card={activeDragItemData} />}
+        </DragOverlay>
       </Box>
     </DndContext>
   )

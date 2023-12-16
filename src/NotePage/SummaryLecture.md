@@ -177,7 +177,11 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 
 - Một cái card thì nó sẽ chứa `columnId` còn cái column thì nó sẽ không chứa `columnId` rồi chúng ta sẽ sử dụng cái này để phân biệt được là đang kéo card hay là keo column
 
+- Thằng sortable bên trong `data.current` không hiểu gì thì chúng ta không dùng đến thằng đó trong phần xử lý của chúng ta
+
 - ## Thực hành nâng cao với kéo thả card với Dndkit: onDragOver
+
+- Đọc trước code logic của thằng onDragOver hiểu cái kiểu dữ liệu mà thư viện nó cung cấp cho chúng ta để có một tư duy tốt -> Để xong sau đó áp dụng vào kiểu dữ liệu của chúng ta(từ kiểu dữ liệu của thư viện áp dụng qua kiểu dữ liệu của chúng ta)
 
 - ## Thuật toán phát hiện va chạm với Dnd-kikt
 
