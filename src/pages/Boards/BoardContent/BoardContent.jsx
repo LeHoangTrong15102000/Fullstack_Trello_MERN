@@ -132,12 +132,19 @@ const BoardContent = ({ board }) => {
         const nextOverColumn = nextColumns.find((column) => column._id === overColumn._id)
 
         if (nextActiveColumn) {
-          //
-          // nextActiveColumn.cards = nextActiveColumn.cards.filter()
+          // Xóa card ở cái column active (cũng có thể hiểu là column cũ, cái khác mà kéo ra khỏi nó để sang column khác)
+          nextActiveColumn.cards = nextActiveColumn.cards.filter((card) => card._id !== activeDraggingCardId)
+
+          // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu => Trả về toàn bộ `Id` của các cái card trong column ấy
+          nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map((card) => card._id)
         }
 
         if (nextOverColumn) {
-          //
+          // Thêm card ở cái column over
+          nextOverColumn.cards = nextOverColumn.cards.filter((card) => card._id !== overCardId)
+
+          // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
+          nextOverColumn
         }
 
         // Sau khi lấy được cái overCardIndex rồi thì chúng ta sẽ sắp xếp nó lại
