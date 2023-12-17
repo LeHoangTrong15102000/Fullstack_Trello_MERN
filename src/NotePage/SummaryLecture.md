@@ -213,7 +213,19 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 
 - Tại sao chúng ta lại không sử dụng activeColumn và overColumn mà phải đi tạo 2 biến là `nextActiveColumn` và `nextOverColumn` -> Như đã nói thì chúng ta muốn `clone Deep` dữ liệu - `nextColumns` ra mới hoàn toàn và không muốn đụng chạm tới dữ liệu cũ -> Nên là tìm ra 2 mảng `nextActiveColumn` và `nextOverColumn` trong mảng `nextColumns` mới
 
-- ## Thuật toán phát hiện va chạm với Dnd-kit
+- Do 2 thằng `nextActiveColumn` và `nextOverColumn` nằm tron thằng `nextColumns` -> Nên khi 2 thz này thay đổi thì `nextColumns` cũng thay đổi theo
+
+- Khi chúng ta kéo và chúng ta thả ra thì nó sẽ có vấn đề nó chưa được chuẩn xác đâu -> Nên là cái này chúng ta sẽ xử lý nó ở `handleDragEnd` -> Còn `handleDragOver` chỉ là trong quá trình kéo -> Còn quá trình thả ra thì phải để `handleDragEnd` xử lý
+
+- Còn một vấn đề nữa là khi kéo card nhỏ thì không sao còn khi kéo card to thì lại có vấn đề -> Sẽ xử lý ở những bước tiếp theo
+
+- ## Thuật toán phát hiện va chạm với Dnd-kit'
+
+- Thuật toán phát hiện va chạm nó đã có cho chúng ta 2 cái rồi
+
+- Ngoài ra đôi lúc có trường hợp phức tạp -> Nó cần phải tự detect tự xử lý, tự phát hiện va chạm => Tự custom thì cái này nó khá là phức tạp hơn
+
+- Rất may là có 1 thuật toán có thể giúp chúng ta xử lý cái vấn đề thả cái `card` đó -> Đó chính là thuật toán `Closest cornors` -> Chỉ cần nó va chạm tới cái góc của phần tử `droppable` là nó sẽ ăn ngay
 
 - ## Hoàn thiện kéo thả card trong cùng Column
 

@@ -8,7 +8,8 @@ import {
   KeyboardSensor,
   useSensor,
   useSensors,
-  defaultDropAnimationSideEffects
+  defaultDropAnimationSideEffects,
+  closestCorners
 } from '@dnd-kit/core'
 import Box from '@mui/material/Box'
 import { arrayMove } from '@dnd-kit/sortable'
@@ -131,6 +132,7 @@ const BoardContent = ({ board }) => {
         const nextActiveColumn = nextColumns.find((column) => column._id === activeColumn._id)
         const nextOverColumn = nextColumns.find((column) => column._id === overColumn._id)
 
+        // Column cũ
         if (nextActiveColumn) {
           // Xóa card ở cái column active (cũng có thể hiểu là column cũ, cái khác mà kéo ra khỏi nó để sang column khác)
           nextActiveColumn.cards = nextActiveColumn.cards.filter((card) => card._id !== activeDraggingCardId)
@@ -139,13 +141,20 @@ const BoardContent = ({ board }) => {
           nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map((card) => card._id)
         }
 
+        // Column mới
         if (nextOverColumn) {
-          // Thêm card ở cái column over
-          nextOverColumn.cards = nextOverColumn.cards.filter((card) => card._id !== overCardId)
+          // Kiểm tra xem card đang kéo nó có tồn tại ở overColumn chưa, nếu có thì cần xoá nó trước(này như bước kiểm tra cho chắc)
+          nextOverColumn.cards = nextOverColumn.cards.filter((card) => card._id !== activeDraggingCardId)
+
+          // Tiếp theo là thêm cái card đang kéo vào overColumn theo vị trí index mới
+          // Thằng toSpliced trả về một cái mảng mới thay vì sửa trực tiếp - cập nhật lại vào cái mảng ban đầu(khác với thz splice())
+          nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, activeDraggingCardData)
 
           // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
-          nextOverColumn
+          nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card._id)
         }
+
+        // console.log('nextColumns: ', nextColumns)
 
         // Sau khi lấy được cái overCardIndex rồi thì chúng ta sẽ sắp xếp nó lại
 
@@ -206,7 +215,14 @@ const BoardContent = ({ board }) => {
 
   return (
     //  thằng Box trên mục đích là để hồi padding thôi để cho nó hiện thành scroll đẹp hơn
-    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
+    <DndContext
+      sensors={sensors}
+      // Thuật toán phát hiện va chạm (Nếu không có nó thì card với cover lớn sẽ không kéo qua column được vì lúc này nó đang bị conflict giữa card và column), chúng ta sẽ dùng closestCorners thay vì closestCenter
+      collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+    >
       <Box
         sx={{
           bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
