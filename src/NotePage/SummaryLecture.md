@@ -199,7 +199,21 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
     } = active
     => Nên destructuring dữ liệu ở bên trong đây luôn
 
-- ## Thuật toán phát hiện va chạm với Dnd-kikt
+- Tại sao chúng ta lại không dùng `columnId` trong lúc `active` và `over` mà phải tạo một hàm tìm kiếm cái column có cái `cardId` đó -> vì cái em nói kia anh check cũng thấy nó phát sinh nhiều vấn đề lắm, nên anh mới phải tìm cách phù hợp mà, nói chung như đi làm thực tế mình gặp vấn đề rồi mình linh hoạt giải quyết thôi
+
+- Đôi lúc sau này đi làm sẽ phải làm code thuần javascript khá là nhiều -> Nên là cứ học chắc javascript để sau này đi làm không bị bỡ ngỡ -> Phải học nhiều thật là nhiều thì mới được
+
+- Đoạn này bắt buộc phải lấy code của chúng nó thôi không còn cách nào khác -> Nhưng tới đoạn sau thì nó sẽ tự đúng mà thôi nên không cần phải lo
+
+- Trường hơp này chúng ta sử dung spread operator cũng được nhưng nó sẽ có vấn đề về sau khi chúng ta muốn xử lý dữ liệu về state thì nó sẽ loạn lên
+
+  - const nextColumns = [...prevColumns]
+
+- Khi mình muốn làm kiểu này thì chúng ta muốn sao chép sâu(Clone Deep Array) cái mảng đó và chúng ta không muốn sao chép shalow(như spread operator)
+
+- Tại sao chúng ta lại không sử dụng activeColumn và overColumn mà phải đi tạo 2 biến là `nextActiveColumn` và `nextOverColumn` -> Như đã nói thì chúng ta muốn `clone Deep` dữ liệu - `nextColumns` ra mới hoàn toàn và không muốn đụng chạm tới dữ liệu cũ -> Nên là tìm ra 2 mảng `nextActiveColumn` và `nextOverColumn` trong mảng `nextColumns` mới
+
+- ## Thuật toán phát hiện va chạm với Dnd-kit
 
 - ## Hoàn thiện kéo thả card trong cùng Column
 
