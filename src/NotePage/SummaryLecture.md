@@ -275,6 +275,10 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 
 - ## Hoàn thiện kéo thả card giữa 2 column khác nhau
 
+- Chúng ta sẽ tận dụng lại code ở phần `handleDragOver` rất là nhiều -> nên là ở bữa nay sẽ rất là tập trung hơn nữa để hòan thành dụ án này càng sớm càng tốt -> Nên là bài này sẽ không khó mà cũng không dễ -> Nên phải là thực sự tập trung thì mới có thể thực hiện được bài học này
+
+- Copy y nguyên tất cả phần setOrderedColumn ở phần `handleDragOver` copy xuống để xử lý cho phần `handleDragEnd`
+
 - ## Xử lý bug rất dị khi kéo thả - Dndkit
 
 - ## Xử lý triệt để bug nhấp nháy khi kéo thả
