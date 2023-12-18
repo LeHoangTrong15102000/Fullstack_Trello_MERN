@@ -229,6 +229,50 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 
 - ## Hoàn thiện kéo thả card trong cùng Column
 
+- Bữa trước onDragOver nó đã khó rồi -> Hôm nay sẽ đi vào onDragEnd sẽ rất khó và cũng rất là hay nên buổi hôm nay sẽ rất là tập trung hết sức -> Hiểu thật là cẩn thận
+
+- Bây giờ chúng ta sẽ phân biệt rõ ràng luôn giữa kéo thả card và kéo thả column
+
+- Việc đầu tiên cần phải làm là chúng ta phải lấy dữ liệu từ trong `activeColumn` và `overColumn` ra -> Lưu ý là ở phần này là xử lý kéo thả card trong cùng một column
+
+- Nhưng mà khi kéo thả card từ column này sang column khác mà vẫn dính `Hành động kéo thả card trong một cái column` là có vấn đề -> Đây sẽ là hành động mấu chốt trong việc xử lý card, nên là cần phải tập trung ở phần này nhiều hơn
+
+- Thì có thể dễ hình dung ra rằng ở phần `onDragOver` ở lần trước thì khi đã kéo cái card qua thì cái card đã được `setState` lại 1 lần rồi và đương nhiên là nó không còn ở column cũ nữa nên khi mà xử lý đến tiếp phần `handleDragEnd` thì chúng ta sẽ gặp vấn đề ở ngay chỗ đó là khi kéo `card` từ column này sang column khác thì nó vẫn `run` tại trường hợp `Kéo thả card trong cùng một cái column`
+
+- Và nên nhớ một điều nữa là trong quá trình luôn luôn phải debug song song để đảm bảo không bị lỗi trong quá trình chạy chương trình
+
+- Thì trước hết ở thằng `onDragStart` chúng ta phải lưu dữ liệu vào state riêng rồi đến khi thằng `onDragEnd` thì chúng ta sẽ đi vào state gốc ban đầu để lấy dữ liệu ra chứ không lấy dữ liệu từ thằng `onDragOver`(đã qua xử lý)
+
+- Tại sao không dùng 2 thầng `activeColumn` và `overColumn` vì khi mà thưc hiện handleDragOver thì 2 thằng `activeColumn` và `overColumn` đã được sử dụng để lấy ra 2 biến là `nextActiveColumn` và `nextOverColumn` và 2 biến này đã dùng để cập nhật dữ liệu rồi -> Nên là lúc này dùng 2 biến `activeColumn` và `overColumn` sẽ không còn tác dụng nữa -> Nên là khi thực hiện ở hàm `handleDragEnd` sẽ không còn sự chính xác nữa.
+
+- Bây giờ chúng ta sẽ lưu lại dữ liệu gốc ban đầu từ cái bước `handleDragStart` -> Tạo một cái state riêng
+
+- Trường hợp là kéo card thì mới set giá trị `oldColumnWhenDraggingCard` lại -> Vì phần kéo column chúng ta đã giải quyết ở phần handleDragEnd rồi nên là không cần phải thực hiện logic cho nó nữa -> Còn phần `kéo Card` do phải xử lý tiếp ở phần `handleDragEnd` nên phải có một state để lưu lại giá trị gốc để có thể xử lý tiếp ở phần `handleDragEnd` cho phần `kéo Card`
+
+- Nên là ở hàm `handleDragStart` sẽ có điều kiện `if` để check nếu bắt đầu là `kéo Card` thì `setState` cho thằng `oldColumnWhenDragginggCard`
+
+- Thay vì chúng ta sử dụng `activeColumn.id` để so sánh với `overColumn.id` thì chúng ta sẽ sử dụng `oldColumnWhenDraggingCard.id` để so sánh với `overColumn.id` -> Nhưng mà ngoài việc sử dụng `oldColumnWhenDraggingCard.id` thì chúng ta có thể sử dụng tới `activeDragItemData.columnId` -> Bản chất thì 2 thằng này là nó như nhau chúng ta có thể linh hoạt sử dụng cách này -> Nhưng cách này về sau sẽ có bug phát sinh -> Lát nữa làm thì chúng ta sẽ thấy
+
+- Những kiến thức về phần xử lý trong đây khá là hay nên gõ lại để hiểu sâu hơn nữa về code của thư viện -> Cũng như áp dụng được nhiều hơn vao trong dự án thực tế
+
+- Hãy chú ý rằng `kéo Card` trong cùng một cái column nó không khác gì `kéo Column` trong một cái `board content`
+
+- Cùng tại một thời điểm chi có một phần tử được kéo thả
+
+  - `const oldColumnIndex = orderedColumns.findIndex((column) => column._id === activeDragItemId)`
+
+  - Nên là ở đây chúng ta sẽ sử dụng `activeDragItemId` đã được setState ở `handleDragStart` thay vì sử dụng `active.id` vì `active.id` khi đi qua `onDragOver` nó đã được thay đổi
+
+  - Thì chỗ này sử dụng `activeDraggingCardId` để so sánh cũng được nhưng mà không nên -> Chúng ta vẫn cứ lấy dữ liệu từ state đi cho chuẩn
+
+- Sau khi đã sắp xếp lại card rồi thì cần setState lại giá trị `orderedColumns` vì thằng này có truyền props xuống các component còn thằng `oldColumnWhenDraggingCard` chỉ là cái state gốc để chúng ta xử lý dữ liệu thôi nên là chúng ta không cần phải cập nhật lại thằng này
+
+- Ở đây do kéo cùng một cái column nên cũng có thể sử dụng `activeDragItemId` hoặc là dùng `overCardId`
+
+- Mặc dù biếnn constant không thể chỉnh sửa dữ liệu, nhưng trong javascript là có thể ghi đè dữ liệu
+
+- Do ở đây có sắp xếp card bằng mảng `cardOrderIds` nên trả về dữ liệu không chuẩn thì nó sẽ bị lỗi
+
 - ## Hoàn thiện kéo thả card giữa 2 column khác nhau
 
 - ## Xử lý bug rất dị khi kéo thả - Dndkit

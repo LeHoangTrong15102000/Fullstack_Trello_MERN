@@ -45,6 +45,7 @@ const Column = ({ column }) => {
     opacity: isDragging ? 0.5 : undefined
   }
 
+  // Do ở đây có sắp xếp card bằng mảng `cardOrderIds` nên trả về dữ liệu không chuẩn thì nó sẽ bị lỗi
   // Sắp xếp các card trong column
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
 
