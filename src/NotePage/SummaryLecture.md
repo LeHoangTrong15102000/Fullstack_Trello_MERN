@@ -343,6 +343,8 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 
 - Thay vì trước đó ở đây là nó trả ra `columnId-02` bây giờ nó đã trả về giá trị id là `card-id-11` rồi -> Như vậy thì nó sẽ tránh được bug là flickering
 
+- Nếu trong trường hợp kéo `card` đến cạnh một cái cạnh của `column` thì thả nó luôn vào trong `column` thay vì chúng ta xử lý ở tại chỗ cái cạnh của cái `column` đấy thì nó sẽ bị bug -> Để tránh trường hợp `flickering` nữa
+
 - ## Xử lý triệt để bug nhấp nháy khi kéo thả
 
 - ## Xử lý Bug khi Column rỗng không chứa card

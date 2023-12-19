@@ -359,7 +359,7 @@ const BoardContent = ({ board }) => {
         const checkColumn = orderedColumns.find((column) => column._id === overId)
         if (checkColumn) {
           // ghi đè lại overId
-          console.log('Over Id before', overId)
+          // console.log('Over Id before', overId)
           overId = closestCenter({
             ...args,
             droppableContainers: args.droppableContainers.filter(
@@ -370,7 +370,7 @@ const BoardContent = ({ board }) => {
 
           // Thay vì trước đó ở đây là nó trả ra `columnId-02` bây giờ nó đã trả về giá trị id là `card-id-11` rồi -> Như vậy thì nó sẽ tránh được bug là flickering
 
-          console.log('Over Id after', overId)
+          // console.log('Over Id after', overId)
         }
 
         // Nếu có overId thì nó sẽ backup lại overId ở trên đây
