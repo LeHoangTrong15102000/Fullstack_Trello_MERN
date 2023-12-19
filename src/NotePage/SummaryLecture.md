@@ -347,6 +347,16 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 
 - ## Xử lý triệt để bug nhấp nháy khi kéo thả
 
+- Trong hôm nay sẽ xử lý triệt để bug nhấp nháy khi kéo thả -> Đây là vấn đề khá là cố hữa của cái thư viện này -> Nên là ở đây chúng ta sẽ fix hoàn toàn cái vấn đề này luôn -> Vẫn là bug `flickering` nhưng mà để xử lý được cái bug này thì nó khó hơn một chút xíu -> Sẽ `tìm hiểu sâu` trong lúc `test` luôn -> Vẫn sẽ là xử lý trong cái function `collisionDetectionStrategy` -> Tuy nhiên cái cách mà có thể xử lý đó là(có thể nói là như một trick - kinh nghiệm xử lý vấn đề khi đi làm thực tế)
+
+  - Đầu tiêu thì cái vấn đề này nó sẽ khó gặp với những cái `card` không chứa `cover` bên trong
+  - Khi mà kéo lên đoạn trên thì có `cái vấn đề gì nó xảy ra` -> Để chúng ta nghĩ ra cái hướng để mà chúng ta fix nó
+  - Khi mà kéo lên trên thì cái thằng `pointerIntersections` nó là một cái mảng rỗng (mà trước lúc đó chúng ta fix thì nó phải trả về một mảng có giá trị thì mới đúng được)
+
+  - Khi mà chúng ta kéo vào khu vực `có column` thì nó mới có giá trị được -> Còn khi mà chúng ta kéo vào khu vực không có `column` thì thằng `pointerIntersections` nó sẽ trả về một cái mảng rỗng
+
+  - Đôi khi không làm gì cả là cách fix bug tốt nhất
+
 - ## Xử lý Bug khi Column rỗng không chứa card
 
 - ## Cảm nghĩ về khóa học MERN Pro ở phần Frontend này

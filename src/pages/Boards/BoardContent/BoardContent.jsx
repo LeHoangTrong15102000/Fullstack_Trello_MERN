@@ -5,14 +5,14 @@ import {
   PointerSensor,
   MouseSensor,
   TouchSensor,
-  KeyboardSensor,
+  // KeyboardSensor,
   useSensor,
   useSensors,
   defaultDropAnimationSideEffects,
   closestCorners,
-  closestCenter,
+  // closestCenter,
   pointerWithin,
-  rectIntersection,
+  // rectIntersection,
   getFirstCollision
 } from '@dnd-kit/core'
 import Box from '@mui/material/Box'
@@ -344,23 +344,28 @@ const BoardContent = ({ board }) => {
       // pointerIntersections thì cái hàm nó luôn luôn đảm bảo là nó sẽ tra ra một cái array rồi
       const pointerIntersections = pointerWithin(args)
 
-      // Thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đây
-      const intersections = !!pointerIntersections?.length ? pointerIntersections : rectIntersection(args)
+      // khi mà nó là một cái mảng rỗng thì không làm gì hết
+      if (!pointerIntersections?.length) return
+
+      // console.log('PointerIntersections : ', pointerIntersections)
+
+      // Thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đây(không cần bước này nữa vì ở trên chúng ta đã kiểm tra pointerIntersections rồi)
+      // const intersections = !!pointerIntersections?.length ? pointerIntersections : rectIntersection(args)
 
       // Tìm overId đầu tiên trong đám intersections ở trên
       //  Hiện tại thằng intersections nó sẽ trả về cho chúng ta giá trị là data(không cần quan tâm tới thằng data này) mà chúng ta cần lấy là `id`
-      let overId = getFirstCollision(intersections, 'id')
+      let overId = getFirstCollision(pointerIntersections, 'id')
 
       if (overId) {
         // Phải kiểm tra overId không đôi lúc nó null sẽ là có vấn đề
 
-        // Nếu cái over nó là column thì sẽ tìm tới cái cardId(chúng ta muốn gần overId sẽ là cái card bên trong column đấy) gần nhất bên trong khu vực va chạm đó dựa vào thuật toán phát hiện va chạm closestCenter hoặc là closestCorners đều được. Tuy nhiên ở đây dùng closestCenter chúng ta sẽ thấy mượt mà hơn.
+        // Nếu cái over nó là column thì sẽ tìm tới cái cardId(chúng ta muốn gần overId sẽ là cái card bên trong column đấy) gần nhất bên trong khu vực va chạm đó dựa vào thuật toán phát hiện va chạm closestCenter hoặc là closestCorners đều được. Tuy nhiên ở đây dùng closestCorners chúng ta sẽ thấy mượt mà hơn.
 
         const checkColumn = orderedColumns.find((column) => column._id === overId)
         if (checkColumn) {
           // ghi đè lại overId
           // console.log('Over Id before', overId)
-          overId = closestCenter({
+          overId = closestCorners({
             ...args,
             droppableContainers: args.droppableContainers.filter(
               // Hiểu rồi
