@@ -309,6 +309,42 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 
 - ## Xử lý bug rất dị khi kéo thả - Dndkit
 
+- Việc làm lập trình không có bug thì mới là lạ -> Nên việc có bug thì rất là bình thường nên không có gì phải đau đầu cả
+
+- Nên việc lỗi thuật toán va chạm ở đây thì chúng ta nên custom lại thuật toán va chạm theo ý của chúng sao cho khác với thư viện -> Và không bị hiện tượng giật giật nữa -> Muốn hoàn hảo thì chúng ta phải custom nâng cao lại -> Để tăng cái độ chính xác và mục đích chúng muốn `kéo thả va chạm` tới những thằng nào
+
+- Do bây giờ thư viện nó chưa fix vấn đề này nên chúng ta phải tự fix vấn đề này -> Rèn luyện trước khi đi làm thôi mà
+
+- Sẽ tìm hàm thuật toán phát hiện va chạm trong thư viện -> Hàm có tên là `collisionDetectionStrategy` -> Đây sẽ là hàm thuật toán phát hiện va chạm -> Sử dụng `useCallback()` để tối ưu hiệu năng ứng dụng của chúng ta
+
+- Sẽ ví dụ cách fix và chúng ta sẽ giải quyết dần các trường hợp này một cách triệt để hơn nữa
+
+- Khi chúng ta kéo thả column thì sẽ sử dụng lại thuật toán cũ đó là thuật toán `closestCorners` -> Còn khi kéo thả card thì chúng ta sẽ custom lại nó
+
+- Thuật toán phát hiện va chạm nó sẽ chạy ở giữa 2 hàm là `handleDragStart` và `handleDragOver` -> Sau đó nó mới chạy tới hàm `handleDragEnd` -> Do là chúng ta `setState` các dữ liệu ở `handleDragStart` nên khi dùng ở thuật toán phát hiện va chạm `collisionDetectionStrategy` thì nó mới chạy đúng được -> Còn nếu setState ở `handleDragOver` và `handleDragEnd` thì nó sẽ không chạy đúng được
+
+- Tất cả những gì sau đây chúng ta học thì nó sẽ tương tự như bên trong cái `multipleContainer` của thư viện `Dndkit` - `collisionDetectionStrategy` -> Sẽ cố gắng giải thích dễ hiểu nhất thể
+
+- `!!` dùng để check giá trị có phù hợp hay không thôi -> Còn nếu để `intersections.length > 0` thì cũng được không vấn đề gì(`nó cũng là kiểu phổ biến lâu nay vẫn dùng rất là bình thường - Nhưng từ khi có kiểu !! thì cái này nó lại được dùng nhiều hơn`) -> Nhưng khi mà giá trị là null dùng `intersections.length > 0` thì dữ liệu sẽ khác ngay còn khi mà sử dụng `!!intersections?.length` thì nó lại không có vấn đề gì
+
+- Đôi khi mà cái hàm `pointerIntersections` nó sẽ trả về `null` mà giá trị `null.length` thì nó sẽ crash trang luôn
+
+- Thuật toán phát hiện va chạm thì nó phải đi qua cái column trước, trước khi nó đi vào cái card bên trong -> Cho nên cái bug chúng ta gặp ban đầu đó là nó `chết` tại `columnId-02`
+
+- Nó cần lastOverId để khi mà giá trị overId nó null thì nó còn tìm đến cái `lastOverId` nầy để nó trả về nếu không thì nó phải trả về bằng rỗng -> Nên là sẽ cần một cái là `lastOverId`
+
+- Bây giờ chúng ta sẽ xử lý tiếp thằng `overId` -> Trước khi chúng ta gán `overId` cho `lastOverId` -> Thì khi chúng ta kéo card chạm đến column khác và khi nó chạm đến column khác thì
+
+- Mình sẽ cố gắng khi mà kéo cái card chạm tới `columnId-02` và chưa chạm tới `card-id-08` -> Thì chúng ta sẽ dùng dữ liệu column này `columnId-02` tìm tới cái card bên trong `column đấy` với thuật toán `closestCenter đi` để cho nó trả về cái giá trị của `card` luôn thay vì trả về `overId` là một giá trị `columnId-02` -> Để cho nó fix được cái `bug flickering` của chúng ta -> Cố gắng hiểu là như vậy là được
+
+- Cái việc đầu tiên trong checkColumn đó là -> gán lại các tham số trong phần `closestCenter({...args})` cho thằng này
+
+- Trong cái tham số của `collisionDetection` nó có tham số là `droppableContainers`
+
+- Thay vì trước đó ở đây là nó trả ra `columnId-02` bây giờ nó đã trả về giá trị id là `card-id-11` rồi -> Như vậy thì nó sẽ tránh được bug là flickering
+
 - ## Xử lý triệt để bug nhấp nháy khi kéo thả
 
 - ## Xử lý Bug khi Column rỗng không chứa card
+
+- ## Cảm nghĩ về khóa học MERN Pro ở phần Frontend này

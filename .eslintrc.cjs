@@ -74,6 +74,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'react/prop-types': 0,
     'react/display-name': 0,
+    'no-extra-boolean-cast': 'errors', // Để cho nó đừng báo lỗi khi dùng với `double boolean` nữa
 
     'no-console': 1,
     'no-lonely-if': 1,

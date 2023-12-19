@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   DndContext,
   DragOverlay,
@@ -9,7 +9,11 @@ import {
   useSensor,
   useSensors,
   defaultDropAnimationSideEffects,
-  closestCorners
+  closestCorners,
+  closestCenter,
+  pointerWithin,
+  rectIntersection,
+  getFirstCollision
 } from '@dnd-kit/core'
 import Box from '@mui/material/Box'
 import { arrayMove } from '@dnd-kit/sortable'
@@ -55,6 +59,9 @@ const BoardContent = ({ board }) => {
   const [activeDragItemData, setActiveDragItemData] = useState(null)
   // State để lưu lại column gốc ban đầu, không có truyền xuống các component nên không có cập nhật lại `state` này khi mà `card` thay đổi
   const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] = useState(null)
+
+  // Điểm va chạm cuối cùng trước đó(xử lý thuật toán phát hiện va chạm)
+  const lastOverId = useRef(null)
 
   useEffect(() => {
     setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
@@ -325,12 +332,69 @@ const BoardContent = ({ board }) => {
     })
   }
 
+  // custom lại thuật toán phát hiện va chạm tối ưu cho việc kéo thả card giũa nhiều column
+  const collisionDetectionStrategy = useCallback(
+    (args) => {
+      // Khi kéo thả column thì chúng ta dùng thuật toán `closestCorners` là chuẩn nhất
+      if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+        return closestCorners({ ...args })
+      }
+
+      // Tìm các điểm giao nhau, va chạm - intersections với con trỏ
+      // pointerIntersections thì cái hàm nó luôn luôn đảm bảo là nó sẽ tra ra một cái array rồi
+      const pointerIntersections = pointerWithin(args)
+
+      // Thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đây
+      const intersections = !!pointerIntersections?.length ? pointerIntersections : rectIntersection(args)
+
+      // Tìm overId đầu tiên trong đám intersections ở trên
+      //  Hiện tại thằng intersections nó sẽ trả về cho chúng ta giá trị là data(không cần quan tâm tới thằng data này) mà chúng ta cần lấy là `id`
+      let overId = getFirstCollision(intersections, 'id')
+
+      if (overId) {
+        // Phải kiểm tra overId không đôi lúc nó null sẽ là có vấn đề
+
+        // Nếu cái over nó là column thì sẽ tìm tới cái cardId(chúng ta muốn gần overId sẽ là cái card bên trong column đấy) gần nhất bên trong khu vực va chạm đó dựa vào thuật toán phát hiện va chạm closestCenter hoặc là closestCorners đều được. Tuy nhiên ở đây dùng closestCenter chúng ta sẽ thấy mượt mà hơn.
+
+        const checkColumn = orderedColumns.find((column) => column._id === overId)
+        if (checkColumn) {
+          // ghi đè lại overId
+          console.log('Over Id before', overId)
+          overId = closestCenter({
+            ...args,
+            droppableContainers: args.droppableContainers.filter(
+              // Hiểu rồi
+              (container) => container.id !== overId && checkColumn?.cardOrderIds.includes(container.id)
+            )
+          })[0]?.id // lấy ra phần tử đầu tiên và lấy `id` của nó ra
+
+          // Thay vì trước đó ở đây là nó trả ra `columnId-02` bây giờ nó đã trả về giá trị id là `card-id-11` rồi -> Như vậy thì nó sẽ tránh được bug là flickering
+
+          console.log('Over Id after', overId)
+        }
+
+        // Nếu có overId thì nó sẽ backup lại overId ở trên đây
+        lastOverId.current = overId
+        return [{ id: overId }]
+      }
+
+      // Nếu overId là null thì nó sẽ trả về mảng rỗng - tránh bug crash trang
+      return lastOverId.current ? [{ id: lastOverId.current }] : []
+    },
+    [activeDragItemType, orderedColumns]
+  )
+
   return (
     //  thằng Box trên mục đích là để hồi padding thôi để cho nó hiện thành scroll đẹp hơn
     <DndContext
       sensors={sensors}
       // Thuật toán phát hiện va chạm (Nếu không có nó thì card với cover lớn sẽ không kéo qua column được vì lúc này nó đang bị conflict giữa card và column), chúng ta sẽ dùng closestCorners thay vì closestCenter
-      collisionDetection={closestCorners}
+
+      // Nếu chỉ dùng closesetCorners sẽ có bug flickering + sai lệch dữ liệu
+      // collisionDetection={closestCorners}
+
+      // Tự custom nâng cao thuật toán phát hiện va chạm
+      collisionDetection={collisionDetectionStrategy}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
