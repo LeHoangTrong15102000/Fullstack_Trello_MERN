@@ -279,6 +279,34 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 
 - Copy y nguyên tất cả phần setOrderedColumn ở phần `handleDragOver` copy xuống để xử lý cho phần `handleDragEnd`
 
+- Ở đây chúng ta có thể thấy khi chúng ta sử dụng `activeDragItemData.columnId` để so sánh với `overColumn._id` nó sẽ sinh ra lỗi
+
+- Khi một `kéo card` đến 1 cột khác và kéo về thì nó sẽ mất hết dữ liệu trong `column` mà `card` được kéo về đó
+
+- Mặc dù ở phần này sẽ code nhanh thôi nhưng quan trọng là chúng ta hiểu được thay đổi dữ liệu trong `column` khi sử dụng các state khác nhau là như nào giữa 2 state là `oldColumnWhenDraggingCard` và `activeDragItemData` -> Hiểu sâu về luồng chạy của 2 thằng này để từ đó có thể `debug code` được dễ dàng
+
+- Khi mà sử dụng thằng `activeDragItemData` thi cái `columnId` nó vẫn chưa được cập nhật và nó vẫn là `columnId` cũ -> Nên là khi kéo từ `columnId` khác về `columnId` cũ thì nó sẽ hiểu là `Kéo trong cùng một column` -> Nên nó sẽ hiểu như vậy và nó chạy vào logic code của thằng `kéo trong cùng một column` -> Nên khi vậy thì `columnId` thì vẫn là cũ mà thằng `cardOrderIds` khi thực hiện `onDragOver` nó đã cập nhật lại rồi nên khi kéo lại thì vẫn là `columnId` cũ và nó chạy xuống logic `kéo trong cùng một cột` và lúc này khi cái `dndOrderedCards` là dữ liệu mảng khi `over` qua nên khi kéo về nó sẽ đem theo dữ liệu đó về luôn -> Dẫn đến mảng dữ liệu của chúng ta bị sai -> Lúc này render ra dữ liệu bị sai
+
+- Nên cái vấn đề ở đây là khi kéo `card` từ `columnId cũ` sang `columnId mới` thi cái `columnId của cái card đó` phải dược cập nhật lại -> Ví dụ như `columnId-03` thì khi kéo qua column mới phải là `columnId-02` thì mới được
+
+- Trước khi chúng ta sửa thêm cái `card` vào `vị trí index mới` -> thì chúng ta cần phải làm một bước nữa để xử lý cái dữ liệu của nó với cái `columnId` -> Thì bây giờ chúng ta sẽ làm như thế này tạo ra một biến mới tên là `rebuild_activeDraggingCardData` để nó vào dữ liệu thay thế cho `activeDragItemData` khi mà chúng ta thêm một `newCardIndex` mới
+
+- Còn bây giờ chúng ta sẽ tinh gọn code lại và tối giản code lại
+
+- Cái logic khi xử lý lúc đầu ở `handleDragEnd` nó y như logic xử lý của `handleDragOver` vậy chỉ khác là chúng ta làm thêm `rebuild_activeDragggingCardData` làm lại dữ liệu chuẩn column trong card -> Hành ra 2 cái logic chúng ta phải đồng bộ với nhau như thế này -> Thì ở `handleDragOver` chúng ta cũng cho thêm giá trị `rebuild_activeDraggingCardData` để cho nó đồng bộ với nhau -> vì 2 thằng `handleDragEnd` và `handleDragOver` điều kéo thả card giữa 2 column khác nhau
+
+- Tiếp theo là chúnga ta sẽ đưa hàm `setState` cụ thể là `setOrderedColumns` ra thành một function riêng để tối ưu code -> Sau này đi làm thì cũng tối ưu code như này
+
+- Và cái hàm này nóc cần một số dữ liệu để nó tính toán nên chúng ta sẽ đưa nó vào tham số -> Và đưa nó vào tại những nơi xử lý `handleDragOver` và `handleDragEnd`
+
+- Thì cái hàm `moveCardBetweenDifferentColumns` thì nó phải có ở `handleDragOver` và `handleDragEnđ` thì nó mới chạy đúng dữ liệu của chúng ta -> Luôn luôn phải để nó chạy ở 2 thằng thì dữ liệu của chúng ta mới có thể đảm bảo là chạy đúng được.
+
+- Sau khi học Backend chúng ta sẽ nảy sinh vấn đề xử lý ở `moveCardBetweenDifferentColumns` cái vấn đề như sau rất là hay đó là cái hành động chúng ta gọi API ở `handleDragEnd` sau khi chúng ta `setState xong` thì chúng ta sẽ gọi API câp nhật lên phía BE -> Vì chúng ta sẽ gọi nó ở phần `handleDragEnd` vì nó chỉ chạy có một lần -> Còn nếu chúng ta call API ở `handleDragOver` thì nó sẽ call nhiều lần -> làm tiêu tốn tài nguyên của server rất nhiều -> tốn kém chi phí
+
+- Ở những phần sau sẽ học BE và cập nhật dữ liệu lên BE một cách chuẩn chỉnh và cẩn thận -> Để không làm tiêu tốn tài nguyên server -> Ở phần này nó không đơn giản nhưng mà nó rất rất là hay -> `Khi mà chúng ta học được thì chúng ta sẽ có ĩ năng rất là tốt`
+
+- Lưu ý để sau này thiết kế API backend một cách chuẩn chỉnh hơn nữa
+
 - ## Xử lý bug rất dị khi kéo thả - Dndkit
 
 - ## Xử lý triệt để bug nhấp nháy khi kéo thả
