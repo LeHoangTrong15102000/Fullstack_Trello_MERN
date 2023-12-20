@@ -18,11 +18,13 @@ import {
 import Box from '@mui/material/Box'
 import { arrayMove } from '@dnd-kit/sortable'
 import cloneDeep from 'lodash/cloneDeep'
+import isEmpty from 'lodash/isEmpty'
 
 import ListColumns from './ListColumns/ListColumns'
 import { mapOrder } from '~/utils/sorts'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
+import { generatePlaceholderCard } from '~/utils/formatters'
 
 // Còn chiều cao của LIST CARD sẽ linh hoạt để nó đáp ứng được với chiều cao
 
@@ -111,6 +113,13 @@ const BoardContent = ({ board }) => {
         // Xóa card ở cái column active (cũng có thể hiểu là column cũ, cái khác mà kéo ra khỏi nó để sang column khác)
         nextActiveColumn.cards = nextActiveColumn.cards.filter((card) => card._id !== activeDraggingCardId)
 
+        // Thêm Placeholder Card nếu Column rỗng: Bị kéo hết Card đi, không còn cái card nào nữa
+        if (isEmpty(nextActiveColumn.cards)) {
+          // Tạo ra cái Card giữ chỗ
+          // Và sẽ gán lại cho giá trị nextActiveColumn.cards
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
+        }
+
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu => Trả về toàn bộ `Id` của các cái card trong column ấy
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map((card) => card._id)
       }
@@ -130,11 +139,23 @@ const BoardContent = ({ board }) => {
         // Thằng toSpliced trả về một cái mảng mới thay vì sửa trực tiếp - cập nhật lại vào cái mảng ban đầu(khác với thz splice())
         nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, rebuild_activeDraggingCardData)
 
+        // Tìm vị trí thứ Index của FE_PlaceholderCard
+        // const placeholderCardIndex = nextOverColumn.cards.findIndex(
+        //   (card) => card._id === `${card.columnId}-placeholder-card`
+        // )
+
+        // if (placeholderCardIndex !== -1) {
+        //   nextOverColumn.cards.splice(placeholderCardIndex, 1)
+        // }
+
+        // Chúng ta sẽ xử lý xoá FE_PlaceholderCard ở giữa 2 cái bước này(Trước khi chúng ta trả lại mảng cardOrderIds cho chuẩn dữ liệu)
+        nextOverColumn.cards = nextOverColumn.cards.filter((card) => !card.FE_PlaceholderCard)
+
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card._id)
       }
 
-      // console.log('nextColumns: ', nextColumns)
+      console.log('NextColumns Cards', nextColumns)
 
       // Sau khi lấy được cái overCardIndex rồi thì chúng ta sẽ sắp xếp nó lại
 
@@ -292,7 +313,7 @@ const BoardContent = ({ board }) => {
       }
     }
 
-    // Xử lý với trường hợp là kéo thả Columnt trong một boardContent
+    // Xử lý với trường hợp là kéo thả Column trong một boardContent
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
       // console.log('Hành động kéo thả Column')
       // Khi mà vị trí nó có thay đổi thì mới xử lý tiếp
