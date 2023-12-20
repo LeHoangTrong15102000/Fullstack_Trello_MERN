@@ -359,4 +359,35 @@ CssBaseline hỗ trợ nhiều cho các trình duyệt
 
 - ## Xử lý Bug khi Column rỗng không chứa card
 
+- Sẽ xử lý vấn đề `column rỗng` ở học phần FE này luôn để khi mà qua `API` chỉ cần tích hợp `API` vào là được
+
+- Bây giờ chúng ta sẽ `hình dung` cái cách mà chúng ta fix con bug `empty column` này -> Để mà fix cái lỗi này thì nó là `những cái vấn đề` liên quan đến `thư viện Dndkit`
+
+- Thì cách fix là chúng ta sẽ tạo ra một bảng ghi `card` ở trong cái column này và `dĩ nhiên` cái `card` này sẽ là card `đặc biệt` -> Và cái `card` này chúng ta chỉ làm nó ở phía FE thôi và chúng ta sẽ ẩn nó đi -> Đó là cách xử lý khi đi làm thực tế -> Chúng ta phải vận dụng linh hoạt khi mà `thư viện`
+  nó không `hỗ trợ` chúng ta trong cái việc này
+
+- Và cái `card đặc biệt` này phải nhấn mạnh là ở phía BE làm và nó sẽ không cần một số thứ như `title` , `description`, `cover`, `memberIds` , `comments`, `attachments`
+
+- Ở cái card rỗng thêm một thuộc tính - trường dữ liệu để chúng ta biết được `card` này đo FE tạo ra và chỉ FE xử lý nó thôi, FE không làm gì liên quan đến BE -> Vì data BE vẫn sẽ để chuẩn
+
+- Tại sao chúng ta lại làm vậy -> Vì ở trong một cái bảng ghi column và cái mảng `card` của nó -> Sẽ luôn luôn tồn tại duy nhất 1 cái `card-placeholder` hoặc là sẽ `không có nó` -> Đơn giản nó chỉ có một cái `id` như này thôi `columnId-04-placeholder-card` -> Và lát nữa thì chúng ta sẽ xử lý nhiều hơn về cái kiểu tạo `_id: "columnId-04-placeholder-card"` như này -> Sẽ fix trước vấn đề này ở FE thôi -> Còn khi về BE sẽ vẫn xử lý thêm(Cần phải học n hiều để hiểu rõ mọi thứ hơn)
+
+- Khi kéo từ `Column` có `card` qua `column_empty` thì được còn khi kéo lại `column` cũ thì nó không ăn -> Thì cái trường hợp bug này chỉ khi chúng ta kéo card giữa 2 column khác nhau -> Mà việc kéo `card` giữa 2 `column` khác nhau thì chúng ta đã xử lý ở phần `handleDragEnd` và `handleDragOver` rồi -> Đến cái `card` cuối cùng thì cùng là chúng ta kéo từ `card` từ `column này` sang `column khác`
+
+- Như vậy vấn đề giải quyết ở đây đó chính là -> Khi kéo `card cuối cùng` sang `column khác` thì chúng ta sẽ tạo ra một cái `card giữ chỗ` cho cái `column` đó -> thì check xem trong cái mảng `nextActiveColumn.cards` thì cái mảng nó có rỗng hay không bằng cách `.length > 0` -> Nếu nó rỗng thì thêm `PlaceholderCard` vào
+
+  - Còn một cách khác sử dụng hàm `isEmpty` để kiểm tra xem nó có rỗng hay không -> Cách này cũng hay dùng khi đi làm thực tế -> Hàm `isEmpty` check cả `Array` và `JSON object` rất là tiện
+
+- Bây giờ chúng ta sẽ tạo ra `cái hàm` để tạo ra cái `Card giữ chỗ` -> Tạo ra hàm giữ chỗ khi card cuối cùng được kéo đi ->
+
+- Tiếp theo còn một bước nữa mà chúng ta cần phải làm đó là -> Ví dụ nếu nó không có `card` thì nó sẽ có `card giữ chỗ` -> Còn nếu nó có `card` rồi thì chúng ta phải `xoá` cái `card giữ chỗ` đi -> Chúng ta phải làm cẩn thận chỗ này -> Để sau này dữ liệu chúng ta `đẩy lên` cho phía `BE` cho nó chuẩn -> Vì ở phía FE chúng ta đang làm cái `FE_PlaceholderCard` này nè thành ra là nếu đẩy lên `API BE` thì BE sẽ không biết cái `FE_PlaceholderCard` này là gì
+
+- Back-end chỉ biết tới những cái `card chính thống` mà thôi còn những cái `FE_PlaceholderCard` là chúng ta `xử lý thuần` ở phía `FE`
+
+- Thì ở đây ở cái `nextOverColumn` khi chúng ta kéo một cái `card` qua cái `column bị rỗng` khác thì chúng ta xoá cái `FE_PlaceholderCard` đó đi là được
+
+- Đó là cách chúng ta fix bug cho cái `empty column` rỗng và dĩ nhiên sau này sẽ có thêm các bước xử lý thêm cho cái trường hợp `empty column` như này nữa -> Khi chúng ta học tích hợp vào API -> Khi đó thì chúng ta cần phải biết thêm `PlaceholderCard` lúc nào và xử lý khi mà chúng ta `cập nhật` một cái `column` 1 cái `card` thì làm sao để không đẩy thằng `PlaceholderCard` này lên phía BE -> Không may BE `validate` thì nó lại lưu vào `Database`
+
+- Chúng ta không muốn những cái `PlaceholderCard` này tồn tại trong `database` -> Nó chỉ là cái ở phía `FE` chúng ta xử lý để làm sao chúng ta `fix` được `bug` của thằng thư viện thế thôi
+
 - ## Cảm nghĩ về khóa học MERN Pro ở phần Frontend này
