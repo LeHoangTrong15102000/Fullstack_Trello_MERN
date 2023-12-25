@@ -1,3 +1,12 @@
-// Viết các apis vào trong đây
+import axios from 'axios'
+import { API_ROOT } from '~/utils/constants'
 
-// Học thuật toán sắp xếp một cái mảng dựa trên một cái mảng khác
+// Api getDetails Board
+export const fetchBoardDetailsAPI = async (boardId) => {
+  const response = await axios.get(`${API_ROOT}/v1/boards/${boardId}`)
+  return response.data
+}
+
+export const fetchCreateColumnAPI = async () => {}
+
+export const fetchCreateCardAPI = async () => {}
