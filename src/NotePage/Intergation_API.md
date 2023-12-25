@@ -4,6 +4,8 @@
 
 ## Axios: Gọi API từ phía Front-end sao cho Clean Code
 
+- Domain của thằng Back-end nên viết ra một biếnn constant để có thể dùng đi dùng lại nhiều
+
 ## CORS đâu có lỗi lầm gì | rất nhiều người đang hiểu nhầm về CORS
 
 ## Aggregate: Query tổng hợp, Join dữ liệu giữa các Collection
