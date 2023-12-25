@@ -66,7 +66,9 @@ const BoardContent = ({ board }) => {
   const lastOverId = useRef(null)
 
   useEffect(() => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    if (board?.columns) {
+      setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    }
   }, [board])
 
   // Tìm column theo cardId => Nó sẽ trả về column có cái cardId được truyền vào, find() sẽ trả về giá trị của phần tử thoả mãn và bỏ qua các giá trị còn lại
