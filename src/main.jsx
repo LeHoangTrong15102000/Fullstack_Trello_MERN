@@ -6,6 +6,8 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 
 import theme from '~/theme'
 import GlobalStyles from '@mui/material/GlobalStyles'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const inputGlobalStyles = <GlobalStyles styles={{ div: { color: 'red' } }} />
 
@@ -17,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <CssBaseline />
     {/* {inputGlobalStyles} */}
     <App />
+    <ToastContainer autoClose={1500} />
   </CssVarsProvider>
   // </React.StrictMode>
 )
