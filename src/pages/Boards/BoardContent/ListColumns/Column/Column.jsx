@@ -33,7 +33,7 @@ import CloseIcon from '@mui/icons-material/Close'
 // const COLUMN_HEADER_HEIGHT = '50px'
 // const COLUMN_FOOTER_HEIGHT = '56px'
 
-const Column = ({ column }) => {
+const Column = ({ column, createNewCard }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id, // Dữ liệu của thư viện nó hiểu là `id` nên là phải dùng `id`
     data: { ...column }
@@ -67,14 +67,14 @@ const Column = ({ column }) => {
     setNewCardTitle('')
   }
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error("Please enter Card's title!")
       return
     }
 
-    // console.log('Card Title', newCardTitle)
-    // Gọi API ở đây
+    await createNewCard({ title: newCardTitle, columnId: column._id })
+
     toast.success('Add new Card successfully!')
     toggleOpenNewCardForm()
     setNewCardTitle('')

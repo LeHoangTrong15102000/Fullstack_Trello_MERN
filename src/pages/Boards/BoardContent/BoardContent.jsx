@@ -38,31 +38,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-// export class MouseSensor extends LibMouseSensor {
-//   static activators = [
-//     {
-//       eventName: 'onMouseDown',
-//       handler: (event) => {
-//         return shouldHandleEvent(event.target)
-//       }
-//     }
-//   ]
-// }
-
-function shouldHandleEvent(element) {
-  let cur = element
-
-  while (cur) {
-    if (cur.dataset && cur.dataset.noDnd) {
-      return false
-    }
-    cur = cur.parentElement
-  }
-
-  return true
-}
-
-const BoardContent = ({ board }) => {
+const BoardContent = ({ board, createNewColumn, createNewCard }) => {
   // Nếu sử dụng PointerSensor mặc định thì phải kết hợp thuộc tính CSS touch-action: none ở những phàn tử kéo thả
   const pointerSensor = useSensor(PointerSensor, {
     // Nó phải di chuyển 10px trước khi nó được active
@@ -463,7 +439,7 @@ const BoardContent = ({ board }) => {
       >
         {/* Column */}
         {/* Xử lý CSS scroll cho từng column, do ban đầu không có overflow: 'unset' nên nó không hiện thanh scroll */}
-        <ListColumns columns={orderedColumns} />
+        <ListColumns columns={orderedColumns} createNewColumn={createNewColumn} createNewCard={createNewCard} />
 
         {/* sẽ để DragOverlay nằm song song với ListColumns */}
         <DragOverlay dropAnimation={customDropAnimation}>

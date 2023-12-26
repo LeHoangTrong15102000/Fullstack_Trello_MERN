@@ -12,23 +12,25 @@ import { toast } from 'react-toastify'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 
-const ListColumns = ({ columns }) => {
+const ListColumns = ({ columns, createNewColumn, createNewCard }) => {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const [newColumnTitle, setNewColumnTitle] = useState('')
 
-  const toggleOpenNewColumnForm = () => {
+  const toggleOpenNewColumnForm = async () => {
     setOpenNewColumnForm(!openNewColumnForm)
     setNewColumnTitle('')
   }
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
       toast.error("Please enter column's title!")
       return
     }
 
-    // console.log('Column Title', newColumnTitle)
-    // Gọi API ở đây
+    await createNewColumn({
+      title: newColumnTitle
+    })
+
     toast.success('Add new column successfully!')
     toggleOpenNewColumnForm()
     setNewColumnTitle('')
@@ -59,7 +61,7 @@ const ListColumns = ({ columns }) => {
         {/* Column */}
         {/* Xử lý CSS scroll cho từng column, do ban đầu không có overflow: 'unset' nên nó không hiện thanh scroll */}
         {columns?.map((column) => (
-          <Column key={column._id} column={column} />
+          <Column key={column._id} column={column} createNewCard={createNewCard} />
         ))}
 
         {/* Box Add new column CTA */}
