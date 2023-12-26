@@ -20,6 +20,10 @@
 
 ## React-Toastify: Hiển thị Flash Message chuyên nghiệp
 
+## Fix bug kéo thả khi cần bôi đen Text bằng chuột
+
+- Cái tên `data-no-dnd` mà chúng ta đặt ở trên `thẻ HTML` là do chúng ta đặt ra -> Và chỉ cần đặt có nghĩa là được rồi
+
 ## Viết 2 APIs tạo Column & Card trong ứng dụng Trello - phần 1
 
 ## Viết 2 APIs tạo Column & Card trong ứng dụng Trello - phần 2
@@ -27,8 +31,6 @@
 ## Ghép 2 APIs tạo Column & Card vào giao diện Trello - phần 1
 
 ## Ghép 2 APIs tạo Column & Card vào giao diện Trello - phần 2
-
-## Fix bug kéo thả khi cần bôi đen Text bằng chuột
 
 ## Hoàn thiện tích hợp kéo thả Card với API - phần 1
 
