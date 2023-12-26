@@ -186,7 +186,6 @@ const Column = ({ column }) => {
 
         {/* Column Footer */}
         <Box
-          data-no-dnd='true'
           sx={{
             height: (theme) => theme.trello.columnFooterHeight,
             p: 2
@@ -204,6 +203,7 @@ const Column = ({ column }) => {
           ) : (
             <Box sx={{ height: '100%', display: 'flex', alignItems: 'center', gap: 1 }}>
               <TextField
+                data-no-dnd='true'
                 label='Enter Card title...'
                 type='text'
                 size='small'
@@ -240,6 +240,7 @@ const Column = ({ column }) => {
               />
               <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', height: 'fit-content' }}>
                 <Button
+                  data-no-dnd='true'
                   onClick={addNewCard}
                   variant='contained'
                   color='success'

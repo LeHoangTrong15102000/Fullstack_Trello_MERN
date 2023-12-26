@@ -3,8 +3,8 @@ import {
   DndContext,
   DragOverlay,
   PointerSensor,
-  MouseSensor as LibMouseSensor,
-  TouchSensor,
+  // MouseSensor as LibMouseSensor,
+  // TouchSensor,
   // KeyboardSensor,
   useSensor,
   useSensors,
@@ -25,6 +25,7 @@ import { mapOrder } from '~/utils/sorts'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 import { generatePlaceholderCard } from '~/utils/formatters'
+import { MouseSensor, TouchSensor } from '~/customLibraries/DndKitSensors'
 
 // Còn chiều cao của LIST CARD sẽ linh hoạt để nó đáp ứng được với chiều cao
 
@@ -37,16 +38,16 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-export class MouseSensor extends LibMouseSensor {
-  static activators = [
-    {
-      eventName: 'onMouseDown',
-      handler: (event) => {
-        return shouldHandleEvent(event.target)
-      }
-    }
-  ]
-}
+// export class MouseSensor extends LibMouseSensor {
+//   static activators = [
+//     {
+//       eventName: 'onMouseDown',
+//       handler: (event) => {
+//         return shouldHandleEvent(event.target)
+//       }
+//     }
+//   ]
+// }
 
 function shouldHandleEvent(element) {
   let cur = element

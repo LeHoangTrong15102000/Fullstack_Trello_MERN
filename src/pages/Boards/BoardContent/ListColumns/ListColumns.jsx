@@ -129,7 +129,7 @@ const ListColumns = ({ columns }) => {
                 }
               }}
             />
-            <Box data-no-dnd='true' sx={{ display: 'flex', gap: 1, alignItems: 'center', height: 'fit-content' }}>
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', height: 'fit-content' }}>
               <Button
                 onClick={addNewColumn}
                 variant='contained'
