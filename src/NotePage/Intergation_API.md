@@ -12,6 +12,10 @@
 
 ## Tạo UI/UX thêm mới Column & Card trong ứng dụng Trello
 
+- Tạo state trong component `ListColumn` để biết khi nào hiện ra nút `Add new column` và khi nào hiển thị ra `input` để người dùng nhập `tên column` vào
+
+- Thẻ `Input` của `MUI` thì cái `value` của nó ko được là giá trị `null`
+
 ## React-Toastify: Hiển thị Flash Message chuyên nghiệp
 
 ## Viết 2 APIs tạo Column & Card trong ứng dụng Trello - phần 1

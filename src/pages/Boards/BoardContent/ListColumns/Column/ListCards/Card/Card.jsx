@@ -31,9 +31,7 @@ const Card = ({ card }) => {
   const isShowCardActions =
     !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length ? true : false
 
-  const handleDragEnd = () => {}
-
-  const handleDragOver = () => {}
+  // Trong đây thôi mà
 
   return (
     <MuiCard
@@ -45,7 +43,11 @@ const Card = ({ card }) => {
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0,0,0,.2)',
         overflow: 'unset',
-        display: card?.FE_PlaceholderCard ? 'none' : 'block'
+        display: card?.FE_PlaceholderCard ? 'none' : 'block',
+        border: '1px solid transparent',
+        '&:hover': {
+          borderColor: (theme) => theme.palette.primary.main
+        }
         // Còn 2 cách nữa có thể dùng để khi sau này không sử dụng display được
         // overflow: card?.FE_PlaceholderCard ? 'hidden' : 'unset',
         // height: card?.FE_PlaceholderCard ? '0px' : 'unset'
