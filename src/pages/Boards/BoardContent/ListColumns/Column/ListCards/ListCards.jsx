@@ -17,7 +17,7 @@ const ListCards = ({ cards }) => {
         sx={{
           // Trick lỏ để xử lý thanh scroll-bar đẹp khi show và khi hidden
           // Trick hay để CSS thanh scroll-bar
-          p: '0 5px',
+          p: '0 5px 5px 5px',
           m: '0 5px',
           display: 'flex',
           flexDirection: 'column',

@@ -16,6 +16,8 @@
 
 - Thẻ `Input` của `MUI` thì cái `value` của nó ko được là giá trị `null`
 
+- 3 Cái card thì cái card cuối cùng `boxShadow` bị mất
+
 ## React-Toastify: Hiển thị Flash Message chuyên nghiệp
 
 ## Viết 2 APIs tạo Column & Card trong ứng dụng Trello - phần 1

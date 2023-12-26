@@ -16,7 +16,10 @@ const ListColumns = ({ columns }) => {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const [newColumnTitle, setNewColumnTitle] = useState('')
 
-  const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
+  const toggleOpenNewColumnForm = () => {
+    setOpenNewColumnForm(!openNewColumnForm)
+    setNewColumnTitle('')
+  }
 
   const addNewColumn = () => {
     if (!newColumnTitle) {
@@ -126,7 +129,7 @@ const ListColumns = ({ columns }) => {
                 }
               }}
             />
-            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', height: 'fit-content' }}>
+            <Box data-no-dnd='true' sx={{ display: 'flex', gap: 1, alignItems: 'center', height: 'fit-content' }}>
               <Button
                 onClick={addNewColumn}
                 variant='contained'

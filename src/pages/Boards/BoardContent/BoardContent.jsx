@@ -3,7 +3,7 @@ import {
   DndContext,
   DragOverlay,
   PointerSensor,
-  MouseSensor,
+  MouseSensor as LibMouseSensor,
   TouchSensor,
   // KeyboardSensor,
   useSensor,
@@ -35,6 +35,30 @@ import { generatePlaceholderCard } from '~/utils/formatters'
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
+}
+
+export class MouseSensor extends LibMouseSensor {
+  static activators = [
+    {
+      eventName: 'onMouseDown',
+      handler: (event) => {
+        return shouldHandleEvent(event.target)
+      }
+    }
+  ]
+}
+
+function shouldHandleEvent(element) {
+  let cur = element
+
+  while (cur) {
+    if (cur.dataset && cur.dataset.noDnd) {
+      return false
+    }
+    cur = cur.parentElement
+  }
+
+  return true
 }
 
 const BoardContent = ({ board }) => {
