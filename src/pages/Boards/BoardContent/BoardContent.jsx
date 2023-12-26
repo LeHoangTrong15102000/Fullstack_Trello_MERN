@@ -157,7 +157,7 @@ const BoardContent = ({ board }) => {
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card._id)
       }
 
-      console.log('NextColumns Cards', nextColumns)
+      // console.log('NextColumns Cards', nextColumns)
 
       // Sau khi lấy được cái overCardIndex rồi thì chúng ta sẽ sắp xếp nó lại
 

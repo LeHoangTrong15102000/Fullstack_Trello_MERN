@@ -22,8 +22,8 @@ const Board = () => {
       {/* Header */}
       <AppBar />
       {/* BoardBar and Content */}
-      <BoardBar board={board} />
-      <BoardContent board={board} />
+      <BoardBar board={mockData.board} />
+      <BoardContent board={mockData.board} />
     </Container>
   )
 }

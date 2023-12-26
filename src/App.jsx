@@ -6,6 +6,8 @@ import HomeIcon from '@mui/icons-material/Home'
 import Typography from '@mui/material/Typography'
 
 import Board from '~/pages/Boards/_id'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 // Trong khi đó là gì mà chúng ta cần phải thực hiện nhiều hơn nữa
 
@@ -16,6 +18,7 @@ function App() {
 
       {/* Board Detail */}
       <Board />
+      <ToastContainer autoClose={1500} />
     </>
   )
 }
