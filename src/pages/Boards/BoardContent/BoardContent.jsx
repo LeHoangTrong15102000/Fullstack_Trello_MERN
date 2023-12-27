@@ -38,7 +38,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard }) => {
+const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) => {
   // Nếu sử dụng PointerSensor mặc định thì phải kết hợp thuộc tính CSS touch-action: none ở những phàn tử kéo thả
   const pointerSensor = useSensor(PointerSensor, {
     // Nó phải di chuyển 10px trước khi nó được active
@@ -333,9 +333,10 @@ const BoardContent = ({ board, createNewColumn, createNewCard }) => {
         // Sau khi có 2 vị trí rồi thì tiếp theo sẽ biến đổi mảng ban đầu lại [id-1 , id-2, id-3] -> [id-1, id-3, id-2]
         const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
 
-        // Lấy ra mảng các id trong `dndOrderedColumns` -> Cần cái này để sau này gọi API cập nhật dữ liệu vào database
-        // const dndOrderedColumnsIds = dndOrderedColumns.map((column) => column._id)
+        // Gọi lại API cập nhật lại dữ liệu dưới database của chúng ta
+        moveColumns(dndOrderedColumns)
 
+        // Vẫn gọi update state ở đây để tránh deplay hoặc là flickering giao diện lúc kéo thả cần phải chờ gọi API (trick small)
         setOrderedColumns(dndOrderedColumns)
       }
     }
