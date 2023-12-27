@@ -9,10 +9,10 @@ import { useMemo } from 'react'
 // const COLUMN_FOOTER_HEIGHT = '56px'
 
 const ListCards = ({ cards }) => {
-  const columnIds = useMemo(() => cards.map((card) => card._id), [cards])
+  const cardIds = useMemo(() => cards?.map((card) => card._id), [cards])
 
   return (
-    <SortableContext items={columnIds} strategy={verticalListSortingStrategy}>
+    <SortableContext items={cardIds} strategy={verticalListSortingStrategy}>
       <Box
         sx={{
           // Trick lỏ để xử lý thanh scroll-bar đẹp khi show và khi hidden
