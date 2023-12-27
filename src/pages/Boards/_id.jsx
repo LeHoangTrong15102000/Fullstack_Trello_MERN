@@ -64,6 +64,7 @@ const Board = () => {
     setBoard(newBoard)
 
     // Gọi API cập nhật lại vị trí column
+    // Sau khi goi API cập nhật lại rồi thì khi mà F5 lại thì nó vẫn sẽ không bi ảnh hưởng nữa
     await updateBoardDetailsAPI(newBoard._id, { columnOrderIds: dndOrderedColumnsIds })
   }
 
