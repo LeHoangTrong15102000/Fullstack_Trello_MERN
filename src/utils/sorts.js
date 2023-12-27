@@ -29,5 +29,7 @@
 // Sắp xếp mảng ban đầu dựa vào cái mảng thứ 2
 
 export const mapOrder = (originalArray, orderArray, key) => {
+  if (!originalArray || !orderArray || !key) return []
+
   return [...originalArray].sort((a, b) => orderArray.indexOf(a[key]) - orderArray.indexOf(b[key]))
 }

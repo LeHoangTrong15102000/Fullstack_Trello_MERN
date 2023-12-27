@@ -28,7 +28,19 @@
 
 ## Viết 2 APIs tạo Column & Card trong ứng dụng Trello - phần 2
 
+- Lưu ý: Cách làm này phụ thuộc vào tuỳ lựa chọn và đặc thù dự án, có nơi thì `BE hỗ trợ` trả về luôn `toàn bộ board` dù đây có là `API` tạo `Column` hay là `Card` đi chăng nữa => Lúc này FE sẽ nhàn hơn
+
+- Cái vấn đề phát sinh tiếp theo là khi `tạo Card` xong thì không thể kéo Card giữa các `column` khác nhau
+
+- Cái vấn đề này nó liên quan tới một thứ hi vọng chúng ta còn nhớ -> Sẽ xử lý cái phần này ở đâu thì trước khi chúng `setBoard` ở trong `useEffect` -> Sau khi đã thêm `placeholderCard` vào `cards` rồi thì tiếp theo chúng ta sẽ thêm `card._id` vào `cardOrderIds`
+
+- Nhưng cái column vừa tạo ra thì nó vẫn chưa có `placeholderCard` nên là nó vẫn không thể kéo card qua được
+
+- Thì khi tạo mới `Column` thì cũng phải tạo ra một `placeholderCard` trong mảng `cards`
+
 ## Ghép 2 APIs tạo Column & Card vào giao diện Trello - phần 1
+
+- Sau khi kéo xong mà F5 thì nó vẫn giữa được vị trí mà nó đã kéo thả
 
 ## Ghép 2 APIs tạo Column & Card vào giao diện Trello - phần 2
 

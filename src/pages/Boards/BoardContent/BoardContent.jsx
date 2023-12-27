@@ -123,6 +123,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard }) => {
           nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
         }
 
+        // console.log('Column isEmpty', nextActiveColumn)
+
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu => Trả về toàn bộ `Id` của các cái card trong column ấy
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map((card) => card._id)
       }
