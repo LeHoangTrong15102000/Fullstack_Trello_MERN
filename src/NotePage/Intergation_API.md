@@ -90,6 +90,23 @@
 
 - Vấn đề kéoo card qua 2 column sẽ là nội dung khó nhất trong các video xử lý
 
+- Trong lúc kéo thả card giữa 2 column khác nhau thì chỉ gọi API ở hàm `handleDragEnd` -> Để tối ưu hiệu năng ứng dụng -> Nên bây giờ chúng ta sẽ tìm cách hợp lý nhất
+
+- Ở cái hàm `moveCardBetweenDifferenceColumns` chúng ta sẽ thêm cho nó thuộc tính để xem nó đang được trigger từ hàm nào `handleDragOver` hay là `handleDragEnd` để chúng ta gọi API hợp lý -> Chúng ta sẽ cho hàm `moveCardBetweenDifferenceColumns` 1 thuộc tính là `triggerFrom` -> Việc còn lại là chúng ta sẽ xử lý nó trong hàm `moveCardBetweenDifferenceColumns`
+
+- Trước khi return cái `nextColumn` thì chúng ta sẽ check điều kiện rằng là cái `triggerFrom` nó đang kéo dược chạy trong hàm `handleDragOver` hay `handleDragEnd`
+
+- Trong cai hàm `gọi API` thì chúng ta cần những giá trị dữ liệu để `gọi API` cho chính xác -> Và ở trường hợp này sẽ viết một API để support riêng cho trường hợp
+
+- `moveCardToDifferentColumns()` sẽ nhận vào 4 tham số `currenCardId`, `prevColumnId` , `nextColumnId`, `dndOrderedColumns`
+
+- Viết API `hỗ trợ` `kéo thả card` giữa `2 column` khác nhau
+
+- API `moveCardToDifferentColumnsAPI` chúng ta cần truyền vào các tham số như sau
+  - Tham số đầu tiên là `currentCardId` -> Là cái `id` của cái `card` chúng ta kéo thả
+  - Tham số thứ 2 là `prevColumnId`
+  - Tham số thứ 3 là
+
 ## Kỹ năng Debug gỡ lỗi quan trọng của lập trình viên
 
 ## Xoá Column và Card, code chi tiết từ FE tới BE

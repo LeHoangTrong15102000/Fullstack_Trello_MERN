@@ -7,8 +7,15 @@ export const fetchBoardDetailsAPI = async (boardId) => {
   return response.data
 }
 
+// Cập nhật lại mảng Columns ở bên trong thằng board
 export const updateBoardDetailsAPI = async (boardId, updateDataBoard) => {
   const response = await axios.put(`${API_ROOT}/v1/boards/${boardId}`, updateDataBoard)
+  return response.data
+}
+
+// API cập nhật card giữa 2 column khác nhau
+export const moveCardToDifferentColumnsAPI = async (updateData) => {
+  const response = await axios.put(`${API_ROOT}/v1/boards/supports/moving_cards`, updateData)
   return response.data
 }
 
