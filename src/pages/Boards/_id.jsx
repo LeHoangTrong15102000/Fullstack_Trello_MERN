@@ -10,7 +10,8 @@ import {
   createNewCardAPI,
   fetchBoardDetailsAPI,
   updateBoardDetailsAPI,
-  updateColumnDetailsAPI
+  updateColumnDetailsAPI,
+  moveCardToDifferentColumnsAPI
 } from '~/apis'
 import isEmpty from 'lodash/isEmpty'
 import { generatePlaceholderCard } from '~/utils/formatters'
@@ -38,7 +39,7 @@ const Board = () => {
           column.cards = mapOrder(column.cards, column.cardOrderIds, '_id')
         }
       })
-      console.log('full board: ', board)
+      // console.log('full board: ', board)
       setBoard(board)
     })
   }, [])
@@ -100,7 +101,33 @@ const Board = () => {
     updateColumnDetailsAPI(columnId, { cardOrderIds: dndOrderedCardIds })
   }
 
-  const moveCardToDifferentColumn = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {}
+  /**
+   * Khi di chuyển card sang column khác
+   * B1: Cập nhật lại mảng cardOrderIds của Column ban đầu chứa nó (Hiểu bản chất là xóa _id của cái card ra khỏi mảng)
+   * B2: Cập nhật lại mảng cardOrderIs của Column tiếp theo (Hiểu bản chất là thêm _id của cái card vào mảng)
+   * B3: Cập nhật lại trường columnId mới của cái Card đã kéo
+   * => Làm một API support riêng
+   */
+  const moveCardToDifferentColumns = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
+    const dndOrderedColumnIds = dndOrderedColumns.map((column) => column._id)
+    // Tạo ra 2 biến danh sách cardOrderIds trước và sau khi kéo
+    const prevCardOrderIds = dndOrderedColumns.find((column) => column._id === prevColumnId)?.cardOrderIds
+    const nextCardOrderIds = dndOrderedColumns.find((column) => column._id === nextColumnId)?.cardOrderIds
+
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnIds
+    setBoard(newBoard)
+
+    // Gọi API cập nhật lại update column khi kéo card giữa 2 column khác nhau
+    moveCardToDifferentColumnsAPI({
+      currentCardId,
+      prevColumnId,
+      prevCardOrderIds,
+      nextColumnId,
+      nextCardOrderIds
+    })
+  }
 
   // Nếu như mà board chưa có thì chúng ta return về loading
   if (!board) {
@@ -133,6 +160,7 @@ const Board = () => {
         createNewCard={createNewCard}
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
+        moveCardToDifferentColumns={moveCardToDifferentColumns}
       />
     </Container>
   )
