@@ -38,7 +38,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) => {
+const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn }) => {
   // Nếu sử dụng PointerSensor mặc định thì phải kết hợp thuộc tính CSS touch-action: none ở những phàn tử kéo thả
   const pointerSensor = useSensor(PointerSensor, {
     // Nó phải di chuyển 10px trước khi nó được active
@@ -68,7 +68,7 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
 
   useEffect(() => {
     if (board?.columns) {
-      setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+      setOrderedColumns(board.columns)
     }
   }, [board])
 
@@ -170,7 +170,7 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
 
   // Trigger khi bắt đầu kéo một phần tử
   const handleDragStart = (event) => {
-    // console.log('handleDragStart >>>>> ', event)
+    // Có columnId nghĩa là đang kéo card
     const isDraggingCard = event?.active?.data?.current.columnId
     setActiveDragItemId(event?.active?.id)
     setActiveDragItemType(isDraggingCard ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN)
@@ -285,17 +285,21 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
 
         // lấy vị trí cũ (từ thằng oldColumnWhenDragginCard)
         const oldCardIndex = oldColumnWhenDraggingCard?.cards?.findIndex((card) => card._id === activeDragItemId)
+        console.log('Old Card Index: ', oldCardIndex)
 
         // Lấy vị trí mới (từ thằng overColumn)
         const newCardIndex = overColumn?.cards?.findIndex((card) => card._id === overCardId)
+        console.log('New Card Index: ', newCardIndex)
 
         // Dùng arrayMove vì kéo card trong một cái column thì tương tự với logic kéo column trong một cái board content
-        const dndOrderedCards = arrayMove(oldColumnWhenDraggingCard.cards, oldCardIndex, newCardIndex)
+        const dndOrderedCards = arrayMove(oldColumnWhenDraggingCard?.cards, oldCardIndex, newCardIndex)
+        const dndOrderedCardIds = dndOrderedCards.map((card) => card._id)
 
         // Lấy ra các mảng id sau này cập nhật lại API
         // const dndOrderedCardIds = dndOrderedCards.map((card) => card._id)
 
         // Việc sắp xếp card xong rồi thì cần phải cập nhật lại `state` cho nó chuẩn
+        // Vẫn gọi update State ở đây để tránh bị delay hoặc flickering các thứ
         setOrderedColumns((prevColumns) => {
           const nextColumns = cloneDeep(prevColumns)
 
@@ -307,14 +311,17 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
 
           // currentColumnDraggingCard.cards thì được cập nhật bằng dndOrderedIds đã được sắp xếp ở bên trên rồi
           currentColumnDraggingCard.cards = dndOrderedCards
-
-          currentColumnDraggingCard.cardOrderIds = dndOrderedCards.map((card) => card._id)
+          currentColumnDraggingCard.cardOrderIds = dndOrderedCardIds
 
           // Cập nhật lại mảng cardOrderIds
           // currentColumnDraggingCard.cardOrderIds = currentColumnDraggingCard?.cards.map((card) => card._id)
 
           return nextColumns
         })
+
+        // Gọi API cập nhật lại khi kéo card
+        // Nhận vào thêm tham số là oldColumnWhenDraggingCard
+        moveCardInTheSameColumn(dndOrderedCards, dndOrderedCardIds, oldColumnWhenDraggingCard._id)
       }
     }
 
@@ -333,11 +340,11 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
         // Sau khi có 2 vị trí rồi thì tiếp theo sẽ biến đổi mảng ban đầu lại [id-1 , id-2, id-3] -> [id-1, id-3, id-2]
         const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
 
-        // Gọi lại API cập nhật lại dữ liệu dưới database của chúng ta
-        moveColumns(dndOrderedColumns)
-
         // Vẫn gọi update state ở đây để tránh deplay hoặc là flickering giao diện lúc kéo thả cần phải chờ gọi API (trick small)
         setOrderedColumns(dndOrderedColumns)
+
+        // Gọi lại API cập nhật lại dữ liệu dưới database của chúng ta
+        moveColumns(dndOrderedColumns)
       }
     }
 

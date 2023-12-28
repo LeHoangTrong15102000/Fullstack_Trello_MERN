@@ -65,7 +65,30 @@
 
 - Sử dụng `allowUnknown` để cho phép không cần đấy một số `trường - field` lên
 
+- Sau khi đã viết API xử lý `kéo thả card` trongg cùng một `column` rồi thì nó lại xuất hiện `1 con bug` cực kì khó nhằn
+
+- Mặc dù đã gọi `API` cập nhật mảng `cardOrderIds` rồii nhừng mà mảng `cards` vẫn chưa sắp xếp -> Nên chúng ta sẽ sắp xếp nó lại ở phía `Client`
+
+- Bug này phát sinh ra khi chúng ta bắt đầu ghép `API` đó là chuyện bình thường đi làm thực tế cũng vậy thôi - giao diện có thể hoạt động trơn tru nhưng mà khi ghép API vào thì nó lại bị lỗi, thì cái cấu trúc dữ liệu và vấn đề xử lý dữ liệu phát sinh
+
+- Khi mà cái Board sau khi chúng ta gọi từ thằng cha thì cái mảng `cards` nó chưa được cập nhâjt
+
+- Có nghĩa là ban đâu nó nhận vị trí Index theo mảng cards gốc ban đầu, mặc đù giao diện card trong column ban đầu vị trí các card trong UI khác so với vị trí `card` trong mảng `Cards` ban đầu -> DO đo khi kéo thả `vào lần đầu tiên` nó sẽ lấy vị trí `Index` của `card` trong mảng `cards` ban đầu dẫn `đến sai` -> Cái kiểu dữ liệu lúc này nó sẽ bị `conflict` với nhau nên xảy ra cái `bug` đó -> Nhưng đến lần kéo thả tiếp theo thì nó sẽ hết bị vấn đề này -> Bởi vì sau đến những lần tiếp theo thì nó - mảng `cards` nó đã được cập nhật rồi
+
+- Do ban đầu thì khi mà truyền mảng `cards` từ thằng board xuống thằng mảng `cards` nó chưa được sắp xếp -> Cố gắng hiểu được đến đoạn này thì sẽ vỡ ra kiến thức rất là nhiều
+- Nên là ban đầu 2 thằng `OldCardIndex`nó lấy giá trị trong mảng `cards` chưa được sắp xếp nên khi mà kéo lần đầu tiên thì nó sẽ sinh ra bug như vậy
+
+- Thì để giải quyết vấn đề này thì chỉ cần chúng ta sắp xếp mảng `cards` ở trên `boardContent` là được -> Sắp xêp xong thì chúng ta truyền xuống dưới lại là `fix` được cái `bug` này
+
+- Sau khi fetch dữ liệu về thì `mapOrder` cho `column` và `card` luôn
+
+- Kéo `Card` từ `column` sang `column khác` thì được nhưng kéo qua xong rồi thì đừng kéo trong cùng `một column` nó sẽ gây làm loạn `data`
+
 ## Hoàn thiện tích hợp kéo thả Card với API - phần 2
+
+- Xử lý kéo thả `card` giữa các `column` khác nhau và gọi API cập nhật
+
+- Vấn đề kéoo card qua 2 column sẽ là nội dung khó nhất trong các video xử lý
 
 ## Kỹ năng Debug gỡ lỗi quan trọng của lập trình viên
 

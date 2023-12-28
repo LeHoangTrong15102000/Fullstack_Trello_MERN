@@ -49,9 +49,15 @@ const Column = ({ column, createNewCard }) => {
     opacity: isDragging ? 0.5 : undefined
   }
 
+  // console.log('Value Column: ', column)
+
   // Do ở đây có sắp xếp card bằng mảng `cardOrderIds` nên trả về dữ liệu không chuẩn thì nó sẽ bị lỗi
   // Sắp xếp các card trong column
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+
+  // Thì khi xuống tới đây thì thằng mảng `cards` nó mới được sắp và hiện ra UI
+  const orderedCards = column.cards
+
+  // console.log('orderedCards: ', orderedCards)
 
   // Dropdown menu
   const [anchorEl, setAnchorEl] = useState(null)
@@ -67,13 +73,13 @@ const Column = ({ column, createNewCard }) => {
     setNewCardTitle('')
   }
 
-  const addNewCard = async () => {
+  const addNewCard = () => {
     if (!newCardTitle) {
       toast.error("Please enter Card's title!")
       return
     }
 
-    await createNewCard({ title: newCardTitle, columnId: column._id })
+    createNewCard({ title: newCardTitle, columnId: column._id })
 
     toast.success('Add new Card successfully!')
     toggleOpenNewCardForm()

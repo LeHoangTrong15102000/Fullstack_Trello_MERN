@@ -21,13 +21,13 @@ const ListColumns = ({ columns, createNewColumn, createNewCard }) => {
     setNewColumnTitle('')
   }
 
-  const addNewColumn = async () => {
+  const addNewColumn = () => {
     if (!newColumnTitle) {
       toast.error("Please enter column's title!")
       return
     }
 
-    await createNewColumn({
+    createNewColumn({
       title: newColumnTitle
     })
 
