@@ -109,6 +109,22 @@
 
 ## Kỹ năng Debug gỡ lỗi quan trọng của lập trình viên
 
+- Sẽ fix các bug của phần trước - cũng như là chia sẻ kinh nghiệm khi đi làm -> Kỹ năng debug một kỹ năng cực kì quan trọng trong lúc đi làm
+
+- Khi gặp bug thì chúng ta cần tìm hiểu nguyên nhân của cái bug đấy là gì --> Hiểu bản chất của cái bug đấy là gì - lỗi là gì -> Sau đó tìm ra cái hướng để chúng ta xử lý và giải quyết
+
+- Lúc này thì chúng ta khi debug thì chúng ta phát hiện thằng `prevCardOrderIds` nó có chứa `placeholderCard` mà thằng này thì lại không `match` với cái `PATTERN_RULES` của chúng ta -> Do khi cập nhật lại API thì vô tình chúng ta gửi cái `placeholderCard` vào `prevCardOrderIds` nên là ở đây cái `PATTERN_RULES`
+
+- Và mục đích của chúng ta là chúng ta không muốn gửi cái `placeholderCard` lên cho phía BE và chúng ta chỉ muốn xử lý ở phía FE mà thôi
+
+- Rất khó để trong trường hơp này `prevCardOrderIds` là một giá trị khác - tối thiểu nố sẽ là một cái mảng có 1 phần tử là `placeholderCard` thì chúng ta sẽ lấy một cái mảng rỗng `|| []` -> Nhưng cách này chúng ta sẽ không làm cứ dể cho nó trắng trang đi rồi tới lúc này chúng ta sẽ xử lý
+
+- Ngoài ra còn một cái bug nữa -> Chính là nó rơi vào trường hợp `tạo một cái card trong column rỗng` -> Thì cái bug này sẽ xử lý như sau -> Ban đầu khi tạo một column thì có một `placeholderCard` nhưng mà sau khi tạo một cái card mới thì cái `placeholderCard` phải nên được xoá -> Vì vậy chúng ta sẽ xử lý cái vấn đề này ở hàm `createNewCard`
+
+- Nên việc ở đây là nếu cái `columnUpdate` là một mảng rỗng thì khi `createNewCard` thì chúng ta mới `push cái card` vào -> Còn không thì chúng ta phải xoá cái `placeholderCard` đi -> Dùng thằng some() khi chúng ta cần check điều kiện gì đó của cái mảng và `return` về kết quả là `true hoặc false` thì nên dùng hàm `some()` để tối ưu vòng lặp
+
+- Đã fix xong bug `liên quan` tới `placeholderCard` khi một `column rỗng` hoặc là khi kéo `card cuối cùng` trong column
+
 ## Xoá Column và Card, code chi tiết từ FE tới BE
 
 ## Xoá ColumnId trong Board - phần bổ sung

@@ -62,11 +62,19 @@ const Board = () => {
     const createdCard = await createNewCardAPI({ ...newCardData, boardId: board._id })
 
     const newBoard = { ...board }
-    const columnToUpdate = newBoard.columns.find((column) => column._id === createdCard.columnId)
-    if (columnToUpdate) {
-      // Khi mà thêm card thì nó cứ push vào sau
-      columnToUpdate.cards.push(createdCard)
-      columnToUpdate.cardOrderIds.push(createdCard._id)
+    const columnUpdate = newBoard.columns.find((column) => column._id === createdCard.columnId)
+
+    if (columnUpdate) {
+      // column rỗng bản chất đã có placeholdercard
+      if (columnUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
+        // columnUpdate.cards = columnUpdate.cards.filter((card) => !card.FE_PlaceholderCard)
+        // columnUpdate.cards.push(createdCard)
+        columnUpdate.cards = [createdCard]
+        columnUpdate.cardOrderIds = [createdCard._id]
+      } else {
+        columnUpdate.cards.push(createdCard)
+        columnUpdate.cardOrderIds.push(createdCard._id)
+      }
     }
 
     setBoard(newBoard)
@@ -80,7 +88,6 @@ const Board = () => {
     newBoard.columns = dndOrderedColumns
     newBoard.columnOrderIds = dndOrderedColumnsIds
     setBoard(newBoard)
-
     // Gọi API cập nhật lại vị trí column
     // Sau khi goi API cập nhật lại rồi thì khi mà F5 lại thì nó vẫn sẽ không bi ảnh hưởng nữa
     updateBoardDetailsAPI(newBoard._id, { columnOrderIds: dndOrderedColumnsIds })
@@ -95,6 +102,7 @@ const Board = () => {
       columnUpdate.cards = dndOrderedCards
       columnUpdate.cardOrderIds = dndOrderedCardIds
     }
+
     setBoard(newBoard)
 
     // Gọi API update Column
@@ -110,14 +118,17 @@ const Board = () => {
    */
   const moveCardToDifferentColumns = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
     const dndOrderedColumnIds = dndOrderedColumns.map((column) => column._id)
-    // Tạo ra 2 biến danh sách cardOrderIds trước và sau khi kéo
-    const prevCardOrderIds = dndOrderedColumns.find((column) => column._id === prevColumnId)?.cardOrderIds
-    const nextCardOrderIds = dndOrderedColumns.find((column) => column._id === nextColumnId)?.cardOrderIds
-
     const newBoard = { ...board }
     newBoard.columns = dndOrderedColumns
     newBoard.columnOrderIds = dndOrderedColumnIds
     setBoard(newBoard)
+
+    // Tạo ra 2 biến danh sách cardOrderIds trước và sau khi kéo
+    // Sẽ xử lý cái `placeholderCard` trước khi gọi API cập nhật
+    const nextCardOrderIds = dndOrderedColumns.find((column) => column._id === nextColumnId)?.cardOrderIds
+    // Rất khó để trong trường hơp này prevCardOrderIds là một giá trị khác - tối thiểu nố sẽ là một cái mảng có 1 phần tử là placeholderCard
+    let prevCardOrderIds = dndOrderedColumns.find((column) => column._id === prevColumnId)?.cardOrderIds
+    if (prevCardOrderIds[0].includes('placeholder-card')) prevCardOrderIds = []
 
     // Gọi API cập nhật lại update column khi kéo card giữa 2 column khác nhau
     moveCardToDifferentColumnsAPI({
