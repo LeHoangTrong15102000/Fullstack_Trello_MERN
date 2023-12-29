@@ -127,6 +127,16 @@
 
 ## Xoá Column và Card, code chi tiết từ FE tới BE
 
+- Khi xoá một column thì chúng ta sẽ bắt chính vào trường hợp .then() còn .catch() thì không cần
+
+- Nếu mà dã dùng description rồi thì không dùng content nữa vì thằng conten nó không nằm trong `dialogContentText`
+
+- Về sau sử dụng Redux để tách các cái function xử lý từ thằng cha ra cho Redux quản lí
+
+- Trước khi gọi API thì update cho chuẩn dữ liệu `stateBoard`
+
+- Sau khi xóa column xong thì xóa luôn columnId của column đó trong columnOrderIds
+
 ## Xoá ColumnId trong Board - phần bổ sung
 
 ## Deploy miễn phí NodeJS Back-end APIs lên Render

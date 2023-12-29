@@ -44,7 +44,8 @@ const BoardContent = ({
   createNewCard,
   moveColumns,
   moveCardInTheSameColumn,
-  moveCardToDifferentColumns
+  moveCardToDifferentColumns,
+  deleteColumnDetail
 }) => {
   // Nếu sử dụng PointerSensor mặc định thì phải kết hợp thuộc tính CSS touch-action: none ở những phàn tử kéo thả
   const pointerSensor = useSensor(PointerSensor, {
@@ -462,7 +463,12 @@ const BoardContent = ({
       >
         {/* Column */}
         {/* Xử lý CSS scroll cho từng column, do ban đầu không có overflow: 'unset' nên nó không hiện thanh scroll */}
-        <ListColumns columns={orderedColumns} createNewColumn={createNewColumn} createNewCard={createNewCard} />
+        <ListColumns
+          columns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+          deleteColumnDetail={deleteColumnDetail}
+        />
 
         {/* sẽ để DragOverlay nằm song song với ListColumns */}
         <DragOverlay dropAnimation={customDropAnimation}>

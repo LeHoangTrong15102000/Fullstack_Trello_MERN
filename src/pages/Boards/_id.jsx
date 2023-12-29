@@ -11,7 +11,8 @@ import {
   fetchBoardDetailsAPI,
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,
-  moveCardToDifferentColumnsAPI
+  moveCardToDifferentColumnsAPI,
+  deleteColumnDetailAPI
 } from '~/apis'
 import isEmpty from 'lodash/isEmpty'
 import { generatePlaceholderCard } from '~/utils/formatters'
@@ -23,6 +24,8 @@ import Typography from '@mui/material/Typography'
 
 const Board = () => {
   const [board, setBoard] = useState(null)
+
+  // Sau này sử dụng Redux thì chỉ cần Fetch nó một cái xong rồi cập nhật lại giá trị ở trên store là được
 
   useEffect(() => {
     const boardId = '658b1924457408f91c6bd442'
@@ -140,7 +143,21 @@ const Board = () => {
     })
   }
 
-  // Nếu như mà board chưa có thì chúng ta return về loading
+  // Xử lý xóa một column
+  const deleteColumnDetail = async (columnId) => {
+    // Cập nhật lại state cho chuẩn dữ liệu
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter((column) => column._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter((_id) => _id !== columnId)
+    setBoard(newBoard)
+
+    // Xử lý API xóa column
+    deleteColumnDetailAPI(columnId).then((res) => {
+      toast.success(res?.deleteResult)
+    })
+  }
+
+  // Nếu như mà board chưa có thì chúng ta return v   ề loading
   if (!board) {
     return (
       <Box
@@ -172,6 +189,7 @@ const Board = () => {
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
         moveCardToDifferentColumns={moveCardToDifferentColumns}
+        deleteColumnDetail={deleteColumnDetail}
       />
     </Container>
   )
