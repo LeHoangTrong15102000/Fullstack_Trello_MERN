@@ -141,4 +141,12 @@
 
 ## Deploy miễn phí NodeJS Back-end APIs lên Render
 
+- Khi deploy lên production thì không cần cái localhost và port 8017 nữa
+
+- Nên là chúng sẽ đổi lỗi `APP_PORT` và `APP_HOST`
+
+- Tại local không nên truy cập tài nguyên trên `production` -> Đây là một case chúng ta không nên làm
+
+- Bữa sau deploy Vercel rồi thêm vào whitelist sau -> Và nhớ những local thì không được trỏ tới tài nguyên trên `server`
+
 ## Deploy miễn phí ReactJS Front-end lên Vercel
