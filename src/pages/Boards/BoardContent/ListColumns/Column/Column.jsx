@@ -9,6 +9,11 @@ import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Tooltip from '@mui/material/Tooltip'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
 
 import ContentCut from '@mui/icons-material/ContentCut'
 import ContentCopy from '@mui/icons-material/ContentCopy'
@@ -24,6 +29,7 @@ import { mapOrder } from '~/utils/sorts'
 
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { useConfirm } from 'material-ui-confirm'
 
 import { toast } from 'react-toastify'
 import TextField from '@mui/material/TextField'
@@ -33,7 +39,7 @@ import CloseIcon from '@mui/icons-material/Close'
 // const COLUMN_HEADER_HEIGHT = '50px'
 // const COLUMN_FOOTER_HEIGHT = '56px'
 
-const Column = ({ column, createNewCard }) => {
+const Column = ({ column, createNewCard, deleteColumnDetail }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id, // Dữ liệu của thư viện nó hiểu là `id` nên là phải dùng `id`
     data: { ...column }
@@ -57,13 +63,13 @@ const Column = ({ column, createNewCard }) => {
   // Thì khi xuống tới đây thì thằng mảng `cards` nó mới được sắp và hiện ra UI
   const orderedCards = column.cards
 
-  // console.log('orderedCards: ', orderedCards)
-
   // Dropdown menu
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const [newCardTitle, setNewCardTitle] = useState('')
+
+  const confirm = useConfirm()
 
   const handleClick = (event) => setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
@@ -85,6 +91,31 @@ const Column = ({ column, createNewCard }) => {
     toggleOpenNewCardForm()
     setNewCardTitle('')
   }
+
+  const handleDeleteColumn = () => {
+    confirm({
+      title: 'Delete Column?',
+      description: 'This action will permanently delete your Column and its Cards! Are you sure?',
+      // Khi dialog mở lên thì nó sẽ focus vào button, nhấn enter sẽ trigger sự kiện click
+      confirmationText: 'Confirm',
+      cancellationText: 'Cancel'
+
+      // allowClose: false, // chỉ cho phép tắt  dialog khi nhắn vào cancel button
+      // dialogProps: { maxWidth: 'xs' },
+      // confirmationButtonProps: { color: 'secondary', variant: 'outlined', autoFocus: true },
+      // cancellationButtonProps: { color: 'warning', variant: 'outlined' },
+
+      // description: `Phải nhập chữ 'hoangtrongdev' thì mới được confirm!`,
+      // confirmationKeyword: 'hoangtrongdev'
+      // buttonOrder: ['confirm', 'cancel']
+    })
+      .then(() => {
+        // Gọi API xử lý việc xoá vào trong đây
+        deleteColumnDetail(column._id)
+      })
+      .catch(() => {})
+  }
+
   return (
     // Sẽ bọc nó vào trong một cái div, mặc định cái div ngoài nó sẽ ăn chiều cao là 100%(phải bọc thẻ div vì vấn đề chiều cao khi kéo thả)
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
@@ -142,13 +173,26 @@ const Column = ({ column, createNewCard }) => {
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
+              // bản chất là khi click vào bất kì chỗ nào của icon thì nó cũng đóng lại
+              onClick={handleClose}
               MenuListProps={{
                 'aria-labelledby': 'basic-column-dropdown'
               }}
             >
-              <MenuItem>
+              <MenuItem
+                sx={{
+                  '&:hover': {
+                    color: 'success.light',
+                    // Phải có khoảng trống & và .delete-forever-icon chứ không nó sẽ hiểu cái className này làl của menuItem
+                    '& .add-card-icon': {
+                      color: 'success.light'
+                    }
+                  }
+                }}
+                onClick={toggleOpenNewCardForm}
+              >
                 <ListItemIcon>
-                  <AddCardIcon fontSize='small' />
+                  <AddCardIcon className='add-card-icon' fontSize='small' />
                 </ListItemIcon>
                 <ListItemText>Add new card</ListItemText>
               </MenuItem>
@@ -171,11 +215,22 @@ const Column = ({ column, createNewCard }) => {
                 <ListItemText>Paste</ListItemText>
               </MenuItem>
               <Divider />
-              <MenuItem>
+              <MenuItem
+                sx={{
+                  '&:hover': {
+                    color: 'warning.dark',
+                    // Phải có khoảng trống & và .delete-forever-icon chứ không nó sẽ hiểu cái className này làl của menuItem
+                    '& .delete-forever-icon': {
+                      color: 'warning.dark'
+                    }
+                  }
+                }}
+                onClick={handleDeleteColumn}
+              >
                 <ListItemIcon>
-                  <DeleteForeverIcon fontSize='small' />
+                  <DeleteForeverIcon className='delete-forever-icon' fontSize='small' />
                 </ListItemIcon>
-                <ListItemText>Remove this column</ListItemText>
+                <ListItemText>Delete this column</ListItemText>
               </MenuItem>
               <MenuItem>
                 <ListItemIcon>
