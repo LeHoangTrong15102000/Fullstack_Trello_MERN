@@ -30,6 +30,8 @@ const Board = () => {
   useEffect(() => {
     const boardId = '658b1924457408f91c6bd442'
     fetchBoardDetailsAPI(boardId).then((board) => {
+      // Do ban đầu mảng cards chưa được sắp xếp nên chúng ta sẽ sắp xếp columns rồi cards trước khi setBoard
+      // Sắp xếp mảng column ở đây luôn để tránh sai dữ liệu khi truyền xuống dưới
       board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
 
       board.columns.forEach((column) => {
@@ -70,6 +72,7 @@ const Board = () => {
     if (columnUpdate) {
       // column rỗng bản chất đã có placeholdercard
       if (columnUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
+        // Xử lý chắc cú nếu trong trường hợp mà khi tạo card mới trong column rỗng thì phải xoá placeholder-card trước
         // columnUpdate.cards = columnUpdate.cards.filter((card) => !card.FE_PlaceholderCard)
         // columnUpdate.cards.push(createdCard)
         columnUpdate.cards = [createdCard]
@@ -131,6 +134,7 @@ const Board = () => {
     const nextCardOrderIds = dndOrderedColumns.find((column) => column._id === nextColumnId)?.cardOrderIds
     // Rất khó để trong trường hơp này prevCardOrderIds là một giá trị khác - tối thiểu nố sẽ là một cái mảng có 1 phần tử là placeholderCard
     let prevCardOrderIds = dndOrderedColumns.find((column) => column._id === prevColumnId)?.cardOrderIds
+    // Khi mà kéo cái card cuối cùng đi thì xoá(Ở đây cũng xử lý chắc cú như ở tạo card)
     if (prevCardOrderIds[0].includes('placeholder-card')) prevCardOrderIds = []
 
     // Gọi API cập nhật lại update column khi kéo card giữa 2 column khác nhau

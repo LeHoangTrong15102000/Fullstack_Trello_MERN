@@ -162,7 +162,6 @@ const BoardContent = ({
 
         // Chúng ta sẽ xử lý xoá FE_PlaceholderCard ở giữa 2 cái bước này(Trước khi chúng ta trả lại mảng cardOrderIds cho chuẩn dữ liệu)
         nextOverColumn.cards = nextOverColumn.cards.filter((card) => !card.FE_PlaceholderCard)
-
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card._id)
       }
