@@ -264,6 +264,7 @@ const BoardContent = ({
         // Khi thằng onDragOver nó `run` thì nó sẽ về giá trị khác
         data: { current: activeDraggingCardData }
       } = active
+
       // OverCard Là cái card đang tương tác với cái card đang được kéo ở trên hoặc là ở dưới(nghĩa là activeCard nằm ở trên hoặc ở dưới overCard)
       const { id: overCardId } = over
 
@@ -319,6 +320,7 @@ const BoardContent = ({
           // Tìm tới column mà chúng ta đang thả (column hiện tại đang kéo card)
           // Ở đây do kéo cùng một cái column nên cũng có thể sử dụng `activeDragItemId` hoặc là dùng `overCardId`
           const currentColumnDraggingCard = nextColumns.find((column) => column._id === overColumn._id)
+          // const currentColumnDraggingCard = nextColumns.find((column) => column._id === oldColumnWhenDraggingCard._id)
 
           // cập nhật dữ liệu lại của cards và cardOrderedIds trong đây
 
@@ -329,10 +331,11 @@ const BoardContent = ({
           // Cập nhật lại mảng cardOrderIds
           // currentColumnDraggingCard.cardOrderIds = currentColumnDraggingCard?.cards.map((card) => card._id)
 
+          // Cập nhật lại chỗ này để update lại giao diện
           return nextColumns
         })
 
-        // Gọi API cập nhật lại khi kéo card
+        // Gọi API cập nhật lại khi kéo card -> Cập nhật lại chỗ này là update lại API để khi F5 lại thì liệu sẽ không thay đổi
         // Nhận vào thêm tham số là oldColumnWhenDraggingCard
         moveCardInTheSameColumn(dndOrderedCards, dndOrderedCardIds, oldColumnWhenDraggingCard._id)
       }
