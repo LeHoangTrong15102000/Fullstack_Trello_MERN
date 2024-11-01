@@ -1,10 +1,7 @@
-// import { createTheme } from '@mui/material/styles'
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
-// import { cyan, orange, teal, deepOrange } from '@mui/material/colors'
 
 const APP_BAR_HEIGHT = '58px'
 const BOARD_BAR_HEIGHT = '60px'
-
 const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT})`
 const COLUMN_HEADER_HEIGHT = '50px'
 const COLUMN_FOOTER_HEIGHT = '56px'
@@ -19,32 +16,10 @@ const theme = extendTheme({
     columnFooterHeight: COLUMN_FOOTER_HEIGHT
   },
   colorSchemes: {
-    // sẽ tách cái mã màu này ra ngoài các component vì sau này trang web sẽ lớn lên nếu mà viết hết vào trong đây thì nó sẽ rất là rối
-    // light: {
-    //   palette: {
-    //     primary: teal,
-    //     secodary: deepOrange
-    //   }
-    //   // components: {
-    //   //   MuiCssBaseline: {
-    //   //     styleOverrides: `
-    //   //       div {
-    //   //         color: gray;
-    //   //       }
-    //   //     `
-    //   //   }
-    //   // }
-    //   // spacing: (factor) => `${0.25 * factor}rem`
-    // },
-    // dark: {
-    //   palette: {
-    //     primary: cyan,
-    //     secondary: orange
-    //   }
-    // }
+    light: {},
+    dark: {}
   },
   components: {
-    // Đây là cách mà chúng ta custom thằng scrollbar
     MuiCssBaseline: {
       styleOverrides: {
         body: {
@@ -62,64 +37,34 @@ const theme = extendTheme({
         }
       }
     },
-    // Name of the component
     MuiButton: {
       styleOverrides: {
-        // root là cấu trúc dữ liệu của nó mà chúng ta muốn override ghi đè
         root: {
-          // Some CSS
           textTransform: 'none',
           borderWidth: '0.5px',
-          '&:hover': {
-            borderWidth: '1.5px'
-          }
+          '&:hover': { borderWidth: '0.5px' }
         }
       }
     },
     MuiInputLabel: {
       styleOverrides: {
-        root: {
-          // color: theme.palette.primary.main,
-          fontSize: '0.875rem'
-        }
+        root: { fontSize: '0.875rem' }
       }
     },
-    // Chỉ ghi đè các typography của body1 mà thôi, chứ không thì nó sẽ ăn luôn vào các Typography-h1/h...
     MuiTypography: {
       styleOverrides: {
         root: {
-          // color: theme.palette.primary.main,
-          '&.MuiTypography-body1': {
-            fontSize: '0.875rem'
-          }
+          '&.MuiTypography-body1': { fontSize: '0.875rem' }
         }
       }
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        // cho nó 1 cái function để lấy ra vài giá trị ở params để custom
         root: {
-          // color: theme.palette.primary.main,
           fontSize: '0.875rem',
-          // Các vấn đề như này thì lên stackOverflow tìm sẽ nhanh hơn
-          // mui remove all blue/red/purple border selected
-          // '.MuiOutlinedInput-notchedOutline': {
-          //   borderColor: theme.palette.primary.light
-          // },
-          // '&:hover': {
-          //   '.MuiOutlinedInput-notchedOutline': {
-          //     borderColor: theme.palette.primary.light
-          //   }
-          // },
-          '& fieldset': {
-            borderWidth: '0.5px !important'
-          },
-          '&:hover fieldset': {
-            borderWidth: '1.5px !important'
-          },
-          '&.Mui-focused fieldset': {
-            borderWidth: '1.5px !important'
-          }
+          '& fieldset': { borderWidth: '0.5px !important' },
+          '&:hover fieldset': { borderWidth: '1px !important' },
+          '&.Mui-focused fieldset': { borderWidth: '1px !important' }
         }
       }
     }

@@ -1,144 +1,85 @@
-import { useState } from 'react'
-
 import Box from '@mui/material/Box'
-import ModeSelect from '../ModeSelect/ModeSelect'
-
-// import TrelloLogo from '~/assets/trello.svg'
-// import ReactComponent để coi TrelloIcon như một component của React
-import Typography from '@mui/material/Typography'
-import Workspaces from './Menu/Workspaces'
-import Recent from './Menu/Recent'
-import Starred from './Menu/Starred'
-import Template from './Menu/Template'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Badge from '@mui/material/Badge'
-import Tooltip from '@mui/material/Tooltip'
-import Profile from './Menu/Profile'
-import InputAdornment from '@mui/material/InputAdornment'
-
+import ModeSelect from '~/components/ModeSelect/ModeSelect'
+import AppsIcon from '@mui/icons-material/Apps'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 import SvgIcon from '@mui/material/SvgIcon'
-import AppsIcon from '@mui/icons-material/Apps'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
+import Typography from '@mui/material/Typography'
+import Workspaces from './Menus/Workspaces'
+import Recent from './Menus/Recent'
+import Starred from './Menus/Starred'
+import Templates from './Menus/Templates'
+import Profiles from './Menus/Profiles'
+import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
-import SearchIcon from '@mui/icons-material/Search'
-import CloseIcon from '@mui/icons-material/Close'
+import { Link } from 'react-router-dom'
+import Notifications from './Notifications/Notifications'
+import AutoCompleteSearchBoard from './SearchBoards/AutoCompleteSearchBoard'
 
-// Thôi thì e hãy về nơi gắm hoa lụa là
-
-const AppBar = () => {
-  const [searchValue, setSearchValue] = useState('')
-
-  const handleRemoveTextSearch = () => {
-    setSearchValue('')
-  }
-
+function AppBar() {
   return (
-    <Box
-      // 16px
-      sx={{
-        width: '100%',
-        height: (theme) => theme.trello.appBarHeight,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 2,
-        paddingX: 2,
-        overflow: 'auto',
-        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0')
-      }}
-    >
+    <Box sx={{
+      width: '100%',
+      height: (theme) => theme.trello.appBarHeight,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 2,
+      paddingX: 2,
+      overflowX: 'auto',
+      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0')
+    }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <AppsIcon sx={{ color: 'white' }} />
-        {/* <img src={TrelloLogo} /> */}
-        {/* Sử dụng inheritViewBox để kế thừa lại scale của thằng svg */}
-        {/* Để mà sử dụng được thằng này thì cần có thư viện của thằng vite đó là `vite-plugin-svgr` */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'white' }}>
-          <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox />
-          <Typography variant='span' sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-            Trello
-          </Typography>
+        <Link to="/boards">
+          <Tooltip title="Board List">
+            <AppsIcon sx={{ color: 'white', verticalAlign: 'middle' }} />
+          </Tooltip>
+        </Link>
 
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
-            <Workspaces />
-            <Recent />
-            <Starred />
-            <Template />
-            <Button
-              variant='outlined'
-              startIcon={<LibraryAddIcon />}
-              sx={{ color: 'white', border: 'none', '&:hover': { border: 'none' } }}
-            >
-              Create
-            </Button>
+        <Link to="/">
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <SvgIcon component={TrelloIcon} fontSize="small" inheritViewBox sx={{ color: 'white' }} />
+            <Typography variant="span" sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }}>Trello</Typography>
           </Box>
+        </Link>
+
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
+          <Workspaces />
+          <Recent />
+          <Starred />
+          <Templates />
+          <Button
+            sx={{
+              color: 'white',
+              border: 'none',
+              '&:hover': { border: 'none' }
+            }}
+            variant="outlined"
+            startIcon={<LibraryAddIcon />}
+          >
+            Create
+          </Button>
         </Box>
+
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, color: 'white' }}>
-        <TextField
-          id='outlined-search'
-          label='Search...'
-          type='text'
-          size='small'
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position='start'>
-                <SearchIcon sx={{ color: 'white' }} />
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position='end'>
-                <CloseIcon
-                  onClick={handleRemoveTextSearch}
-                  fontSize='small'
-                  sx={{ color: searchValue ? 'white' : 'transparent', cursor: 'pointer' }}
-                />
-              </InputAdornment>
-            )
-          }}
-          sx={{
-            minWidth: '120px',
-            maxWidth: '180px',
-            '& label': {
-              color: 'white'
-            },
-            '& input': {
-              color: 'white'
-            },
-            '& label.Mui-focused': {
-              color: 'white'
-            },
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: 'white'
-              },
-              '&:hover fieldset': {
-                borderColor: 'white'
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: 'white'
-              }
-            }
-          }}
-        />
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        {/* Tìm kiếm nhanh một hoặc nhiều cái board */}
+        <AutoCompleteSearchBoard />
+
+        {/* Dark - Light - System modes */}
         <ModeSelect />
 
-        <Tooltip title='Notifications'>
-          <Badge color='warning' variant='dot' sx={{ cursor: 'pointer' }}>
-            <NotificationsNoneIcon sx={{ color: 'white' }} />
-          </Badge>
-        </Tooltip>
+        {/* Xử lý hiển thị các thông báo - notifications ở đây */}
+        <Notifications />
 
-        <Tooltip title='Help'>
+        <Tooltip title="Help">
           <HelpOutlineIcon sx={{ cursor: 'pointer', color: 'white' }} />
         </Tooltip>
 
-        <Profile />
+        <Profiles />
+
       </Box>
     </Box>
   )
